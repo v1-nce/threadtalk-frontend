@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "../hooks/AuthProvider"; // Import the hook
+import { useAuth } from "../hooks/AuthProvider";
 
 export default function Navbar() {
-  const { user, logout } = useAuth(); // Use the hook
+  const { user, logout } = useAuth();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
@@ -19,17 +19,12 @@ export default function Navbar() {
           <span className="font-display text-xl font-bold text-crust">ThreadTalk</span>
         </Link>
 
-        {/* Search Bar omitted for brevity... */}
-
-        {/* User Actions */}
         <div className="flex items-center gap-4">
-           {/* ... New Thread button omitted for brevity ... */}
           
           <div className="flex items-center gap-2 text-sm font-medium text-foreground">
              <span className="hidden sm:inline">{user?.username}</span>
           </div>
 
-          {/* Logout Button */}
           <button 
             onClick={logout} 
             className="text-muted-foreground hover:text-destructive transition-colors"

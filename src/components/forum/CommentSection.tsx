@@ -22,7 +22,6 @@ export default function CommentSection({ postId, initialComments }: CommentSecti
         content: rootReply,
         post_id: postId,
       });
-      // Append new comment to the list
       setComments([...comments, newComment]);
       setRootReply("");
     } catch (err) {
@@ -32,7 +31,6 @@ export default function CommentSection({ postId, initialComments }: CommentSecti
 
   return (
     <div className="mt-8 rounded-xl border border-border bg-card p-6 shadow-sm">
-      {/* Root Reply Form */}
       <form onSubmit={handleRootComment}>
         <textarea
           className="w-full rounded-lg border border-input bg-background p-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
@@ -51,7 +49,6 @@ export default function CommentSection({ postId, initialComments }: CommentSecti
         </div>
       </form>
 
-      {/* Comment List */}
       <div className="mt-8 space-y-6">
         <h3 className="font-display text-lg font-bold border-b border-border pb-2">
           {comments.length} Comments

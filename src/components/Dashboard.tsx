@@ -7,8 +7,6 @@ import TopicList from "./forum/TopicList";
 export default function Dashboard() {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [creating, setCreating] = useState(false);
@@ -33,7 +31,7 @@ export default function Dashboard() {
       await createTopic(formData);
       setIsModalOpen(false);
       setFormData({ name: "", description: "" });
-      fetchTopics(); // Refresh list immediately
+      fetchTopics();
     } catch (err) {
       alert("Failed to create topic. Name might be taken.");
     } finally {
@@ -43,7 +41,6 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8">
-      {/* Header */}
       <div className="mb-8 flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold text-crust">Communities</h1>
@@ -58,10 +55,8 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* Content */}
       <TopicList topics={topics} loading={loading} />
 
-      {/* Create Modal Overlay */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-fade-in">
           <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-2xl animate-rise">
