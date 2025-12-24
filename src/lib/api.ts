@@ -39,6 +39,16 @@ export interface Post {
   username: string;
 }
 
+export interface PaginatedPosts {
+  data: Post[];
+  next_cursor: string;
+}
+
+export interface PostDetailsResponse {
+  post: Post;
+  comments: Comment[];
+}
+
 export interface Comment {
   id: string;
   content: string;
@@ -55,14 +65,14 @@ export interface SignupRequest {
   password: string;
 }
 
-export interface LoginRequest {
-  username: string;
-  password: string;
-}
-
 export interface SignupResponse {
   message: string;
   user: User;
+}
+
+export interface LoginRequest {
+  username: string;
+  password: string;
 }
 
 export interface LoginResponse {
@@ -79,11 +89,15 @@ export interface CreateTopicRequest {
   description: string;
 }
 
+// Create Topic Response
+
 export interface CreatePostRequest {
   title: string;
   content: string;
   topic_id: string;
 }
+
+// Create Post Response
 
 export interface CreateCommentRequest {
   content: string;
@@ -96,16 +110,6 @@ export interface GetTopicsRequest {
 }
 
 export type GetTopicsResponse = Topic[];
-
-export interface PaginatedPosts {
-  data: Post[];
-  next_cursor: string;
-}
-
-export interface PostDetailsResponse {
-  post: Post;
-  comments: Comment[];
-}
 
 export const signup = async (data: SignupRequest): Promise<SignupResponse> => {
   const response = await api.post<SignupResponse>('/auth/signup', data);

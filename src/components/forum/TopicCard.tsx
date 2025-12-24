@@ -3,25 +3,24 @@ import { Topic } from "../../lib/api";
 
 export default function TopicCard({ topic }: { topic: Topic }) {
   return (
-    <Link 
-      href={`/topic/${topic.id}`}
-      className="group block space-y-3 rounded-xl border border-border bg-card p-6 shadow-card transition-all hover:border-primary/50 hover:shadow-warm"
+    <Link
+      href={`/topic/${topic.id}`} 
+      className="group flex w-full items-center justify-between rounded-md border border-border bg-card px-4 py-3 transition-all hover:border-primary/50 hover:bg-accent/50"
     >
-      <div className="flex items-center justify-between">
-        <h3 className="font-display text-xl font-bold text-crust group-hover:text-primary transition-colors">
+      <div className="flex flex-col text-left">
+        <span className="font-bold text-crust decoration-primary/50 underline-offset-2 group-hover:underline">
           {topic.name}
-        </h3>
-        <svg 
-          className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" 
-          fill="none" viewBox="0 0 24 24" stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
+        </span>
+        {topic.description && (
+          <span className="line-clamp-1 text-xs text-muted-foreground">
+            {topic.description}
+          </span>
+        )}
       </div>
       
-      <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-        {topic.description}
-      </p>
+      <div className="rounded-full bg-secondary px-4 py-1.5 text-xs font-bold text-secondary-foreground group-hover:bg-secondary/80">
+        View
+      </div>
     </Link>
   );
 }

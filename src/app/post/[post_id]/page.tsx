@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { getPostDetails, Post, Comment } from "../../../lib/api";
 import Navbar from "../../../components/Navbar";
 import PostCard from "../../../components/forum/PostCard";
-import CommentSection from "../../../components/forum/CommentSection"; // Imported!
+import CommentSection from "../../../components/forum/CommentSection";
 import { useAuth } from "../../../hooks/AuthProvider";
 import AuthPage from "../../../components/AuthPage";
 
@@ -34,7 +34,7 @@ export default function PostPage() {
     <main className="min-h-screen bg-background pb-20">
       <Navbar />
       <div className="container mx-auto max-w-3xl px-4 py-8">
-        <PostCard post={post} detailed />
+        <PostCard post={post} />
         <CommentSection postId={post.id} initialComments={comments} />
       </div>
     </main>

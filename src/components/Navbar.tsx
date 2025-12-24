@@ -8,26 +8,22 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-              <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-5 5 10 10 0 0 1-5 5 10 10 0 0 1-10-10A10 10 0 0 1 12 2z" />
-            </svg>
+      <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        <Link href="/" className="group flex items-center gap-2.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-xl transition-transform group-hover:scale-105">
+            🍞
           </div>
-          <span className="font-display text-xl font-bold text-crust">ThreadTalk</span>
+          <span className="font-display text-xl font-bold tracking-tight text-crust">ThreadTalk</span>
         </Link>
 
         <div className="flex items-center gap-4">
-          
-          <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-             <span className="hidden sm:inline">{user?.username}</span>
+          <div className="text-sm font-semibold text-foreground">
+             {user?.username}
           </div>
 
           <button 
             onClick={logout} 
-            className="text-muted-foreground hover:text-destructive transition-colors"
+            className="p-1 text-muted-foreground transition-colors hover:text-destructive"
             title="Logout"
           >
              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">

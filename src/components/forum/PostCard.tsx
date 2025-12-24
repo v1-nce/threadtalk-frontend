@@ -1,37 +1,41 @@
 import Link from "next/link";
 import { Post } from "../../lib/api";
 
-interface PostCardProps {
-  post: Post;
-  detailed?: boolean;
-}
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+};
 
-export default function PostCard({ post, detailed = false }: PostCardProps) {
-  const content = (
-    <div className={`space-y-3 rounded-xl border border-border bg-card p-6 ${
-      detailed ? "shadow-none border-b-0 rounded-b-none" : "shadow-card transition-all hover:border-primary/50 hover:shadow-warm"
-    }`}>
-      <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-        <span className="font-bold text-foreground">u/{post.username}</span>
-        <span>•</span>
-        <span>{new Date(post.created_at).toLocaleDateString()}</span>
-      </div>
-
-      <h2 className={`font-display font-bold text-crust ${detailed ? "text-3xl" : "text-xl group-hover:text-primary"}`}>
-        {post.title}
-      </h2>
-
-      <div className={`text-foreground/90 whitespace-pre-wrap ${detailed ? "" : "line-clamp-3 text-sm"}`}>
-        {post.content}
-      </div>
-    </div>
-  );
-
-  if (detailed) return content;
-
+export default function PostCard({ post }: { post: Post }) {
   return (
-    <Link href={`/post/${post.id}`} className="group block">
-      {content}
+    <Link
+      href={`/post/${post.id}`}
+      className="group flex flex-col gap-1 rounded-md border border-border bg-card p-4 transition-all hover:border-primary/50 hover:bg-accent/50"
+    >
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <span className="font-bold text-foreground">{post.username}</span>
+        <span>•</span>
+        <span>{formatDate(post.created_at)}</span>
+      </div>
+
+      <h3 className="text-lg font-bold leading-tight text-crust group-hover:text-primary">
+        {post.title}
+      </h3>
+
+      <p className="line-clamp-2 text-sm text-muted-foreground">
+        {post.content}
+      </p>
+
+      <div className="mt-2 flex items-center gap-4 text-xs font-bold text-muted-foreground">
+        <div className="flex items-center gap-1 rounded px-1 py-0.5 transition-colors hover:bg-secondary/50">
+          <span>💬 Comments</span>
+        </div>
+        <div className="flex items-center gap-1 rounded px-1 py-0.5 transition-colors hover:bg-secondary/50">
+          <span>↗ Share</span>
+        </div>
+      </div>
     </Link>
   );
 }
