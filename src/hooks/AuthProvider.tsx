@@ -39,7 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const signupUser = async (data: SignupRequest): Promise<SignupResponse> => {
         try {
           const response = await signup(data);
-          setUser(response.user);
+          const user = 'user' in response ? response.user : response;
+          setUser(user);
           return response;
         } catch (err) {
           console.error(err);
@@ -51,7 +52,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const loginUser = async (data: LoginRequest): Promise<LoginResponse> => {
         try {
           const response = await login(data);
-          setUser(response.user);
+          const user = 'user' in response ? response.user : response;
+          setUser(user);
           return response;
         } catch (err) {
           console.error(err);

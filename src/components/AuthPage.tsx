@@ -8,7 +8,7 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-4">
       <div className="w-full max-w-md animate-fade-up">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold text-crust mb-2">ThreadTalk</h1>

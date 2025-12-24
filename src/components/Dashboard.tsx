@@ -3,29 +3,51 @@
 import { useEffect, useState } from "react";
 import { getTopics, createTopic, Topic } from "../lib/api";
 import TopicList from "./forum/TopicList";
+import { validateTopicName, validateTopicDescription } from "../lib/validation";
+import ErrorToast from "./ui/ErrorToast";
 
 export default function Dashboard() {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", description: "" });
   const [creating, setCreating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getTopics().then(setTopics).finally(() => setLoading(false));
   }, []);
 
+  const filteredTopics = topics.filter((t) => 
+    t.name.toLowerCase().includes(search.toLowerCase()) || 
+    t.description.toLowerCase().includes(search.toLowerCase())
+  );
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim()) return;
+    setError(null);
+
+    const nameError = validateTopicName(formData.name);
+    if (nameError) {
+      setError(nameError);
+      return;
+    }
+
+    const descError = validateTopicDescription(formData.description);
+    if (descError) {
+      setError(descError);
+      return;
+    }
+
     setCreating(true);
     try {
       await createTopic(formData);
       setIsModalOpen(false);
       setFormData({ name: "", description: "" });
       getTopics().then(setTopics);
-    } catch {
-      alert("Failed to create topic.");
+    } catch (err: any) {
+      setError(err.message || "Failed to create topic. Name might be taken.");
     } finally {
       setCreating(false);
     }
@@ -36,7 +58,8 @@ export default function Dashboard() {
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_320px] items-start">
           
-          <div className="flex flex-col gap-6">
+          {/* ADDED: min-w-0 prevents grid blowout */}
+          <div className="flex flex-col gap-6 min-w-0">
             <h1 className="text-2xl font-bold text-crust">Communities</h1>
             
             <div className="relative">
@@ -45,10 +68,12 @@ export default function Dashboard() {
                 type="text" 
                 placeholder="Search communities..." 
                 className="w-full rounded-xl border border-border bg-card py-3 pl-10 pr-4 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
             </div>
 
-            <TopicList topics={topics} loading={loading} />
+            <TopicList topics={filteredTopics} loading={loading} />
           </div>
 
           <div className="hidden sticky top-24 md:flex flex-col gap-6">
@@ -58,7 +83,7 @@ export default function Dashboard() {
                 <h2 className="font-bold text-crust">Home</h2>
               </div>
               <p className="mb-6 text-sm text-muted-foreground leading-relaxed">
-                Your personal ThreadTalk frontpage. Come here to check in with your favorite communities.
+                Welcome to ThreadTalk! Check in with your favorite communities and have fun yapping! :)
               </p>
               <hr className="border-border mb-6" />
               <button 
@@ -88,12 +113,14 @@ export default function Dashboard() {
             </div>
             
             <form onSubmit={handleCreate} className="flex flex-col gap-4 p-6">
+              {error && <ErrorToast message={error} onDismiss={() => setError(null)} />}
               <div className="space-y-1.5">
                 <label className="text-xs font-bold uppercase text-muted-foreground">Name</label>
                 <input
                   autoFocus
                   className="w-full rounded-lg border border-input bg-background p-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="breadlovers"
+                  maxLength={50}
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 />
@@ -105,9 +132,13 @@ export default function Dashboard() {
                   className="w-full resize-none rounded-lg border border-input bg-background p-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="What is this community about?"
                   rows={3}
+                  maxLength={600}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 />
+                <div className="text-xs text-muted-foreground text-right">
+                    {formData.description.length}/600
+                </div>
               </div>
 
               <div className="flex justify-end gap-3 pt-2">

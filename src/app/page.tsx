@@ -1,6 +1,5 @@
 "use client";
 
-import Navbar from "../components/Navbar";
 import { useAuth } from '../hooks/AuthProvider';
 import AuthPage from '../components/AuthPage';
 import Dashboard from '../components/Dashboard';
@@ -22,7 +21,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-background">
-      <Navbar />
       <Dashboard />
     </main>
   );

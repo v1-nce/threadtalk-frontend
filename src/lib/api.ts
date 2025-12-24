@@ -8,9 +8,37 @@ const api = axios.create({
   withCredentials: true,
 });
 
+const MAX_RETRIES = 10;
+const RETRYABLE_STATUSES = [408, 500, 503];
+
 api.interceptors.response.use(
   (response) => response,
-  (error: AxiosError<{ error: string }>) => {
+  async (error: AxiosError<{ error: string }>) => {
+    const config = error.config as any;
+    const status = error.response?.status;
+    
+    // Handle rate limiting (429)
+    if (status === 429) {
+      const retryAfter = parseInt(error.response?.headers['retry-after'] || '60', 10) * 1000;
+      if (config && !config._rateLimitRetry) {
+        config._rateLimitRetry = true;
+        await new Promise(resolve => setTimeout(resolve, retryAfter));
+        return api(config);
+      }
+    }
+    
+    // Handle retryable errors (408, 500, 503)
+    if (status && RETRYABLE_STATUSES.includes(status) && config && !config._retry) {
+      config._retry = config._retry || 0;
+      
+      if (config._retry < MAX_RETRIES) {
+        config._retry += 1;
+        const delay = Math.pow(2, config._retry - 1) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return api(config);
+      }
+    }
+    
     throw new Error(error.response?.data?.error || error.message);
   }
 );
@@ -37,6 +65,7 @@ export interface Post {
   topic_id: string;
   created_at: string;
   username: string;
+  comment_count: number;
 }
 
 export interface PaginatedPosts {
@@ -65,7 +94,7 @@ export interface SignupRequest {
   password: string;
 }
 
-export interface SignupResponse {
+export type SignupResponse = User | { 
   message: string;
   user: User;
 }
@@ -75,7 +104,7 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
+export type LoginResponse = User | { 
   message: string;
   user: User;
 }
@@ -103,10 +132,6 @@ export interface CreateCommentRequest {
   content: string;
   post_id: string;
   parent_id?: string;
-}
-
-export interface GetTopicsRequest {
-  search?: string;
 }
 
 export type GetTopicsResponse = Topic[];
@@ -145,8 +170,10 @@ export const getTopics = async (): Promise<Topic[]> => {
   return response.data;
 };
 
-export const getTopicPosts = async (topicId: string, cursor = ''): Promise<PaginatedPosts> => {
-  const response = await api.get<PaginatedPosts>(`/topics/${topicId}/posts?cursor=${cursor}`);
+export const getTopicPosts = async (topicId: string, cursor = '', search = ''): Promise<PaginatedPosts> => {
+  const query = new URLSearchParams({ cursor });
+  if (search) query.append("search", search);
+  const response = await api.get<PaginatedPosts>(`/topics/${topicId}/posts?${query.toString()}`);
   return response.data;
 };
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { signup } from "../lib/api";
+import { validateUsername, validatePassword } from "../lib/validation";
 
 interface RegisterFormProps {
   onSuccess: () => void;
@@ -14,13 +15,26 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    const usernameError = validateUsername(formData.username);
+    if (usernameError) {
+      setError(usernameError);
+      return;
+    }
+
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-    setLoading(true);
-    setError("");
 
+    setLoading(true);
     try {
       await signup({ username: formData.username, password: formData.password });
       onSuccess();

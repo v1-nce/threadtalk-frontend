@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { login } from "../lib/api";
+import { validateUsername } from "../lib/validation";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -10,9 +11,15 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
+    const usernameError = validateUsername(formData.username);
+    if (usernameError) {
+      setError(usernameError);
+      return;
+    }
+
+    setLoading(true);
     try {
       await login(formData);
       window.location.reload(); 

@@ -1,3 +1,5 @@
+"use client";
+
 import { Topic } from "../../lib/api";
 import TopicCard from "./TopicCard";
 
