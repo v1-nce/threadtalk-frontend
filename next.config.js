@@ -1,20 +1,24 @@
 /** @type {import('next').NextConfig} */
 // This is to allow the frontend to talk to itself solving
-// Third-part cookies issue
+// solving Third-Party cookies issue for mobile browsers!
 const nextConfig = {
     async rewrites() {
       return [
-        // Proxy Auth routes
+        // Auth Routes (Signup, Login, Logout)
         {
           source: '/auth/:path*',
           destination: `${process.env.NEXT_PUBLIC_API_URL}/auth/:path*`,
         },
-        // Proxy Protected API routes
+        // Protected API Routes (Profile, Create Post)
         {
           source: '/api/:path*',
           destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
         },
-        // Proxy Public routes (Topics, Posts)
+        // PUBLIC API Routes (The missing fix for your 301 error)
+        {
+          source: '/topics',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/topics`,
+        },
         {
           source: '/topics/:path*',
           destination: `${process.env.NEXT_PUBLIC_API_URL}/topics/:path*`,
@@ -23,8 +27,8 @@ const nextConfig = {
           source: '/posts/:path*',
           destination: `${process.env.NEXT_PUBLIC_API_URL}/posts/:path*`,
         },
-        // Proxy Health check
-        {
+        // Health Check
+         {
           source: '/health',
           destination: `${process.env.NEXT_PUBLIC_API_URL}/health`,
         }
