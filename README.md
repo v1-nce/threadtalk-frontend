@@ -1,12 +1,16 @@
-# ThreadTalk — Frontend
+# ThreadTalk Frontend
 
-ThreadTalk is a production-ready frontend for a lightweight threaded discussion/forum application. Built with Next.js and TypeScript, it provides a modern, responsive UI for community-driven discussions with authentication, topic management, post creation, and nested comment threads.
+**threadtalk-frontend** is a production-ready frontend for a lightweight threaded discussion/forum application. Built with Next.js and TypeScript, it provides a modern, responsive UI for community-driven discussions with authentication, topic management, post creation, and nested comment threads.
+
+**Backend Repository Here:** [https://github.com/v1-nce/threadtalk-backend](https://github.com/v1-nce/threadtalk-backend)
+**Deployed Application Here:** [https://threadtalk-app.vercel.app](https://threadtalk-app.vercel.app)
 
 ## Features
 
 - **Authentication**: Secure cookie-based authentication with signup, login, and logout
 - **Topic Management**: Browse and create discussion topics/communities
 - **Post System**: Create and view posts within topics with search functionality
+- **Share System**: Non-users can view posts and comments without signing up for an account
 - **Threaded Comments**: Nested comment threads with reply functionality
 - **Real-time Updates**: Automatic refresh after creating posts and comments
 - **Responsive Design**: Mobile-first design with Tailwind CSS
@@ -176,8 +180,6 @@ Client-side validation is implemented to match backend rules:
 
 ## Backend Requirements
 
-The backend should:
-
 - Expose all endpoints listed in the API Integration section
 - Support CORS with credentials (cookies)
 - Return errors in format: `{ error: "message" }`
@@ -193,7 +195,3 @@ The backend should:
 4. Run `npm run lint` to check for issues
 5. Test your changes locally
 6. Submit a pull request
-
-## License
-
-No license is specified. Add a `LICENSE` file if you want to make the project open source.
