@@ -1,0 +1,2373 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.gitignore
+eslint.config.mjs
+next.config.js
+next.config.ts
+package.json
+postcss.config.mjs
+README.md
+src/app/globals.css
+src/app/icon.png
+src/app/layout.tsx
+src/app/page.tsx
+src/app/post/[post_id]/page.tsx
+src/app/topic/[topic_id]/page.tsx
+src/components/AuthPage.tsx
+src/components/Dashboard.tsx
+src/components/forum/CommentItem.tsx
+src/components/forum/CommentSection.tsx
+src/components/forum/PostCard.tsx
+src/components/forum/PostList.tsx
+src/components/forum/TopicCard.tsx
+src/components/forum/TopicList.tsx
+src/components/LoginForm.tsx
+src/components/Navbar.tsx
+src/components/RegisterForm.tsx
+src/components/ui/ErrorToast.tsx
+src/hooks/AuthProvider.tsx
+src/lib/api.ts
+src/lib/validation.ts
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+</file>
+
+<file path="eslint.config.mjs">
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+</file>
+
+<file path="src/app/globals.css">
+@import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-sans: "Source Sans 3", system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+
+  /* Theme Colors - Mapped to CSS Variables */
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  /* Custom Bread Palette */
+  --color-crust: hsl(var(--crust));
+  --color-crumb: hsl(var(--crumb));
+  --color-wheat: hsl(var(--wheat));
+  --color-honey: hsl(var(--honey));
+  --color-flour: hsl(var(--flour));
+
+  /* Animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-rise: rise 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-fade-up: fade-up 0.5s ease-out;
+
+  @keyframes accordion-down {
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+  @keyframes rise {
+    0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes fade-up {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Base Styles & Variables */
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --background: 40 33% 97%;
+    --foreground: 25 30% 15%;
+    --card: 40 30% 95%;
+    --card-foreground: 25 30% 15%;
+    --popover: 40 33% 97%;
+    --popover-foreground: 25 30% 15%;
+    --primary: 32 60% 52%;
+    --primary-foreground: 40 33% 97%;
+    --secondary: 38 40% 90%;
+    --secondary-foreground: 25 30% 20%;
+    --muted: 38 25% 88%;
+    --muted-foreground: 25 15% 45%;
+    --accent: 38 70% 65%;
+    --accent-foreground: 25 30% 15%;
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 40 33% 97%;
+    --border: 32 25% 82%;
+    --input: 32 25% 85%;
+    --ring: 32 60% 52%;
+    --radius: 0.75rem;
+
+    /* Custom */
+    --crust: 25 45% 35%;
+    --crumb: 40 35% 92%;
+    --wheat: 42 50% 70%;
+    --honey: 38 75% 55%;
+    --flour: 40 20% 96%;
+  }
+
+  .dark {
+    --background: 25 25% 10%;
+    --foreground: 40 25% 92%;
+    --card: 25 22% 14%;
+    --card-foreground: 40 25% 92%;
+    --popover: 25 22% 14%;
+    --popover-foreground: 40 25% 92%;
+    --primary: 38 65% 58%;
+    --primary-foreground: 25 30% 10%;
+    --secondary: 25 20% 20%;
+    --secondary-foreground: 40 25% 90%;
+    --muted: 25 18% 22%;
+    --muted-foreground: 40 15% 60%;
+    --accent: 38 55% 50%;
+    --accent-foreground: 25 30% 10%;
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 40 25% 95%;
+    --border: 25 20% 22%;
+    --input: 25 20% 22%;
+    --ring: 38 65% 58%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+</file>
+
+<file path="src/components/ui/ErrorToast.tsx">
+"use client";
+
+import { useEffect } from "react";
+
+interface ErrorToastProps {
+  message: string;
+  onDismiss: () => void;
+  duration?: number;
+}
+
+export default function ErrorToast({ message, onDismiss, duration = 5000 }: ErrorToastProps) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onDismiss();
+    }, duration);
+    return () => clearTimeout(timer);
+  }, [onDismiss, duration]);
+
+  return (
+    <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive animate-fade-in">
+      {message}
+    </div>
+  );
+}
+</file>
+
+<file path="src/lib/validation.ts">
+export const validateUsername = (username: string): string | null => {
+  if (username.length < 3 || username.length > 50) {
+    return "Username must be between 3 and 50 characters";
+  }
+  if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+    return "Username can only contain letters, numbers, and underscores";
+  }
+  return null;
+};
+
+export const validatePassword = (password: string): string | null => {
+  if (password.length < 8) {
+    return "Password must be at least 8 characters";
+  }
+  return null;
+};
+
+export const validatePostTitle = (title: string): string | null => {
+  const trimmed = title.trim();
+  if (trimmed.length < 5 || title.length > 250) {
+    return "Title must be between 5 and 250 characters";
+  }
+  return null;
+};
+
+export const validatePostContent = (content: string): string | null => {
+  if (content.length > 600) {
+    return "Content must be 600 characters or less";
+  }
+  return null;
+};
+
+export const validateCommentContent = (content: string): string | null => {
+  if (content.length > 2000) {
+    return "Comment must be 2000 characters or less";
+  }
+  return null;
+};
+
+export const validateTopicName = (name: string): string | null => {
+  if (name.trim().length < 1 || name.length > 50) {
+    return "Topic name must be between 1 and 50 characters";
+  }
+  return null;
+};
+
+export const validateTopicDescription = (description: string): string | null => {
+  if (description.length > 600) {
+    return "Description must be 600 characters or less";
+  }
+  return null;
+};
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+</file>
+
+<file path="next.config.js">
+/** @type {import('next').NextConfig} */
+// This is to allow the frontend to talk to itself solving
+// solving Third-Party cookies issue for mobile browsers!
+const nextConfig = {
+    async rewrites() {
+      return [
+        // Auth Routes (Signup, Login, Logout)
+        {
+          source: '/auth/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/auth/:path*`,
+        },
+        // Protected API Routes (Profile, Create Post)
+        {
+          source: '/api/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/api/:path*`,
+        },
+        // PUBLIC API Routes (The missing fix for your 301 error)
+        {
+          source: '/topics',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/topics`,
+        },
+        {
+          source: '/topics/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/topics/:path*`,
+        },
+        {
+          source: '/posts/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/posts/:path*`,
+        },
+        // Health Check
+         {
+          source: '/health',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/health`,
+        }
+      ]
+    },
+  }
+  
+  module.exports = nextConfig
+</file>
+
+<file path="next.config.ts">
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+  devIndicators: false
+};
+
+export default nextConfig;
+</file>
+
+<file path="postcss.config.mjs">
+/** @type {import('postcss-load-config').Config} */
+const config = {
+  plugins: {
+    '@tailwindcss/postcss': {},
+    autoprefixer: {},
+  },
+};
+
+export default config;
+</file>
+
+<file path="src/app/layout.tsx">
+import type { Metadata } from "next";
+import React from "react";
+import { AuthProvider } from "../hooks/AuthProvider";
+import Navbar from "../components/Navbar";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "ThreadTalk",
+  description: "ThreadTalk",
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en">
+      <body>
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
+      </body>
+    </html>
+  );
+}
+</file>
+
+<file path="src/app/page.tsx">
+"use client";
+
+import { useAuth } from '../hooks/AuthProvider';
+import AuthPage from '../components/AuthPage';
+import Dashboard from '../components/Dashboard';
+
+export default function Home() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthPage />;
+  }
+
+  return (
+    <main className="min-h-screen bg-background">
+      <Dashboard />
+    </main>
+  );
+}
+</file>
+
+<file path="src/components/AuthPage.tsx">
+"use client";
+
+import { useState } from "react";
+import LoginForm from "./LoginForm";
+import RegisterForm from "./RegisterForm";
+
+export default function AuthPage() {
+  const [isLogin, setIsLogin] = useState(true);
+
+  return (
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center p-4">
+      <div className="w-full max-w-md animate-fade-up">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-crust mb-2">ThreadTalk</h1>
+          <p className="text-muted-foreground">Join the conversation</p>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
+          <div className="mb-8 flex rounded-xl bg-secondary/50 p-1">
+            <button
+              onClick={() => setIsLogin(true)}
+              className={`flex-1 rounded-lg py-2.5 text-sm font-medium transition-all duration-200 ${
+                isLogin ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => setIsLogin(false)}
+              className={`flex-1 rounded-lg py-2.5 text-sm font-medium transition-all duration-200 ${
+                !isLogin ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Sign Up
+            </button>
+          </div>
+
+          {isLogin ? (
+            <LoginForm />
+          ) : (
+            <RegisterForm onSuccess={() => setIsLogin(true)} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/forum/CommentItem.tsx">
+"use client";
+
+import { useState, useRef } from "react";
+import { Comment, createComment } from "../../lib/api";
+import { useAuth } from "../../hooks/AuthProvider";
+import { validateCommentContent } from "../../lib/validation";
+import ErrorToast from "../ui/ErrorToast";
+
+interface CommentItemProps {
+  comment: Comment;
+  postId: string;
+  onRefresh: () => void;
+  depth?: number;
+}
+
+export default function CommentItem({ comment, postId, onRefresh, depth = 0 }: CommentItemProps) {
+  const { user } = useAuth();
+  const [isReplying, setIsReplying] = useState(false);
+  const [replyContent, setReplyContent] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const replyRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setReplyContent(e.target.value);
+    if (replyRef.current) {
+      replyRef.current.style.height = "auto";
+      replyRef.current.style.height = `${replyRef.current.scrollHeight}px`;
+    }
+  };
+
+  const handleReply = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!replyContent.trim()) return;
+    setError(null);
+
+    const contentError = validateCommentContent(replyContent);
+    if (contentError) {
+      setError(contentError);
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await createComment({
+        content: replyContent,
+        post_id: postId,
+        parent_id: comment.id,
+      });
+      setIsReplying(false);
+      setReplyContent("");
+      onRefresh();
+    } catch (err: any) {
+      setError(err.message || "Failed to reply");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className={`flex flex-col ${depth > 0 ? "mt-4" : "mt-0"}`}>
+      <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+        <span className="font-bold text-foreground">{comment.username}</span>
+        <span>•</span>
+        <span>{new Date(comment.created_at).toLocaleDateString()}</span>
+      </div>
+
+      <div className="text-sm text-crust leading-relaxed whitespace-pre-wrap break-words">
+        {comment.content}
+      </div>
+
+      <div className="flex items-center gap-4 mt-2 mb-2">
+        {user && (
+          <button
+            onClick={() => setIsReplying(!isReplying)}
+            className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Reply
+          </button>
+        )}
+      </div>
+
+      {isReplying && (
+        <form onSubmit={handleReply} className="mb-4 flex flex-col gap-3">
+          {error && <ErrorToast message={error} onDismiss={() => setError(null)} />}
+          <div className="flex gap-3 items-start border-l-2 border-border pl-4">
+            <textarea
+            ref={replyRef}
+            autoFocus
+            rows={1}
+            // CHANGED: max=2000
+            maxLength={2000}
+            className="flex-1 resize-none rounded-md border border-input bg-background p-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+            placeholder="Reply..."
+            value={replyContent}
+            onChange={handleInput}
+            style={{ minHeight: "38px" }}
+          />
+            <div className="flex flex-col gap-2 shrink-0">
+               <button
+                type="submit"
+                disabled={submitting}
+                className="rounded-full bg-primary px-4 py-1.5 text-xs font-bold text-white hover:bg-primary/90 disabled:opacity-50"
+              >
+                Reply
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsReplying(false)}
+                className="px-3 py-1 text-xs font-bold text-muted-foreground hover:text-foreground text-center"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      )}
+
+      {comment.children && comment.children.length > 0 && (
+        <div className="ml-1 border-l-2 border-border pl-4">
+          {comment.children.map((child) => (
+            <CommentItem
+              key={child.id}
+              comment={child}
+              postId={postId}
+              onRefresh={onRefresh}
+              depth={depth + 1}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/forum/PostList.tsx">
+"use client";
+
+import { useEffect, useState } from "react";
+import { getTopicPosts, Post } from "../../lib/api";
+import PostCard from "./PostCard";
+
+interface PostListProps {
+  topicId: string;
+}
+
+export default function PostList({ topicId }: PostListProps) {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!topicId) return;
+
+    getTopicPosts(topicId)
+      .then((res) => {
+        setPosts(res.data || []);
+      })
+      .catch((err) => {
+        console.error("Failed to load posts:", err);
+        setPosts([]);
+      })
+      .finally(() => setLoading(false));
+  }, [topicId]);
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-24 w-full animate-pulse rounded-md border border-border/50 bg-secondary/20" />
+        ))}
+      </div>
+    );
+  }
+
+  if (posts.length === 0) {
+    return (
+      <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/50 text-center text-muted-foreground">
+        <p className="font-medium text-crust">No posts yet</p>
+        <p className="text-sm">Be the first to share something!</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      {posts.map((post) => (
+        <PostCard key={post.id} post={post} />
+      ))}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/LoginForm.tsx">
+"use client";
+
+import { useState } from "react";
+import { login } from "../lib/api";
+import { validateUsername } from "../lib/validation";
+
+export default function LoginForm() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({ username: "", password: "" });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    const usernameError = validateUsername(formData.username);
+    if (usernameError) {
+      setError(usernameError);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await login(formData);
+      window.location.reload(); 
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 animate-rise" autoComplete="off">
+      {error && <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">Username</label>
+        <input
+          type="text"
+          name="username_entry"
+          required
+          autoComplete="off"
+          placeholder="Enter your username"
+          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+          value={formData.username}
+          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">Password</label>
+        <input
+          type="password"
+          name="password_entry"
+          required
+          autoComplete="one-time-code"
+          placeholder="Enter your password"
+          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+          value={formData.password}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="mt-2 w-full rounded-xl bg-primary py-2.5 font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-warm active:scale-[0.98] disabled:opacity-70"
+      >
+        {loading ? "Signing In..." : "Sign In"}
+      </button>
+    </form>
+  );
+}
+</file>
+
+<file path="src/components/RegisterForm.tsx">
+"use client";
+
+import { useState } from "react";
+import { signup } from "../lib/api";
+import { validateUsername, validatePassword } from "../lib/validation";
+
+interface RegisterFormProps {
+  onSuccess: () => void;
+}
+
+export default function RegisterForm({ onSuccess }: RegisterFormProps) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({ username: "", password: "", confirmPassword: "" });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    const usernameError = validateUsername(formData.username);
+    if (usernameError) {
+      setError(usernameError);
+      return;
+    }
+
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await signup({ username: formData.username, password: formData.password });
+      onSuccess();
+    } catch (err: any) {
+      setError(err.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4 animate-rise" autoComplete="off">
+      {error && <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
+      
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">Username</label>
+        <input
+          type="text"
+          name="reg_username"
+          required
+          autoComplete="off"
+          placeholder="Choose a username"
+          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+          value={formData.username}
+          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">Password</label>
+        <input
+          type="password"
+          name="reg_password"
+          required
+          autoComplete="one-time-code"
+          placeholder="Create password"
+          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+          value={formData.password}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">Confirm Password</label>
+        <input
+          type="password"
+          name="reg_confirm_password"
+          required
+          autoComplete="one-time-code"
+          placeholder="Confirm password"
+          className="w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+          value={formData.confirmPassword}
+          onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="mt-2 w-full rounded-xl bg-primary py-2.5 font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-warm active:scale-[0.98] disabled:opacity-70"
+      >
+        {loading ? "Creating Account..." : "Sign Up"}
+      </button>
+    </form>
+  );
+}
+</file>
+
+<file path="src/hooks/AuthProvider.tsx">
+"use client"
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { signup, login, logout, getProfile } from '../lib/api';
+import type { SignupRequest, LoginRequest, SignupResponse, LoginResponse, LogoutResponse, User } from '../lib/api';
+
+interface AuthContext {
+    user: User | null;
+    loading: boolean;
+    signup: (data: SignupRequest) => Promise<SignupResponse>;
+    login: (data: LoginRequest) => Promise<LoginResponse>;
+    logout: () => Promise<LogoutResponse>;
+}
+
+const AuthContext = createContext<AuthContext | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        const initializeauth = async () => {
+            try {
+                const response = await getProfile()
+                setUser(response);
+            } catch (err) {
+                console.error(err);
+                setUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        initializeauth();
+    }, []);
+
+    const signupUser = async (data: SignupRequest): Promise<SignupResponse> => {
+        try {
+          const response = await signup(data);
+          const user = 'user' in response ? response.user : response;
+          setUser(user);
+          return response;
+        } catch (err) {
+          console.error(err);
+          setUser(null);
+          throw err;
+        }
+    };
+    
+    const loginUser = async (data: LoginRequest): Promise<LoginResponse> => {
+        try {
+          const response = await login(data);
+          const user = 'user' in response ? response.user : response;
+          setUser(user);
+          return response;
+        } catch (err) {
+          console.error(err);
+          setUser(null);
+          throw err;
+        }
+    };
+    
+    const logoutUser = async (): Promise<LogoutResponse> => {
+        try {
+          const response = await logout();
+          setUser(null);
+          return response;
+        } catch(err) {
+          console.error(err);
+          throw err;
+        };
+    };
+
+    return (
+        <AuthContext.Provider
+          value={{
+            user,
+            loading,
+            signup: signupUser,
+            login: loginUser,
+            logout: logoutUser,
+          }}
+        >
+          {children}
+        </AuthContext.Provider>
+    );
+}
+
+export function useAuth() {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+      throw new Error('useAuth must be used within AuthProvider');
+    }
+    return context;
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "threadtalk-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.561.0",
+    "next": "16.0.8",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.22",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.8",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="src/app/post/[post_id]/page.tsx">
+"use client";
+
+import { useEffect, useState, useCallback } from "react";
+import { useParams } from "next/navigation";
+import { getPostDetails, Post, Comment } from "../../../lib/api";
+import CommentSection from "../../../components/forum/CommentSection";
+
+export default function PostPage() {
+  const params = useParams();
+  const postId = typeof params.post_id === "string" ? params.post_id : "";
+
+  const [post, setPost] = useState<Post | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  const fetchData = useCallback(() => {
+    if (!postId) return;
+    getPostDetails(postId)
+      .then((data) => {
+        setPost(data.post);
+        setComments(data.comments || []);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, [postId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleShare = async () => {
+    if (!post) return;
+    const url = window.location.href;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: post.title, url });
+      } catch (err) {}
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+      }
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <div className="h-8 w-2/3 animate-pulse rounded-md bg-secondary/20 mb-4" />
+        <div className="h-32 w-full animate-pulse rounded-md bg-secondary/20" />
+      </div>
+    );
+  }
+
+  if (!post) return <div className="text-center py-20 text-muted-foreground">Post not found.</div>;
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_320px] items-start">
+          
+          {/* Main Content - ADDED: min-w-0 */}
+          <div className="flex flex-col gap-6 min-w-0">
+            
+            <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3">
+                <div className="font-bold text-foreground">{post.username}</div>
+                <span>•</span>
+                <span>{new Date(post.created_at).toLocaleDateString()}</span>
+              </div>
+              
+              {/* ADDED: break-words to handle long titles */}
+              <h1 className="text-2xl font-bold text-crust mb-4 leading-tight break-words">
+                  {post.title}
+              </h1>
+
+              {/* ADDED: break-words to handle long content */}
+              <div className="text-base text-crust/90 whitespace-pre-wrap leading-relaxed break-words">
+                  {post.content}
+              </div>
+              
+              <div className="mt-6 flex items-center gap-4 text-xs font-bold text-muted-foreground border-t border-border pt-4">
+                <div className="flex items-center gap-1">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  {post.comment_count} Comments
+                </div>
+                
+                <button 
+                  onClick={handleShare}
+                  className="flex items-center gap-1 cursor-pointer hover:text-primary transition-colors"
+                >
+                   {copied ? (
+                     <>
+                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+                       Copied Link!
+                     </>
+                   ) : (
+                     <>
+                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                       Share
+                     </>
+                   )}
+                </button>
+              </div>
+            </div>
+
+            <CommentSection postId={postId} comments={comments} onRefresh={fetchData} />
+          </div>
+
+          <div className="hidden sticky top-24 md:flex flex-col gap-4">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <div className="mb-3 flex items-center gap-2 border-b border-border pb-3">
+                 <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">OP</div>
+                 <h2 className="font-bold text-crust">About Author</h2>
+              </div>
+              <div className="text-sm">
+                <p className="font-bold text-crust">{post.username}</p>
+                <p className="text-xs text-muted-foreground mt-1">Original Poster</p>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Posting Rules</h3>
+              <ul className="text-sm space-y-2 text-crust/80 list-disc pl-4 marker:text-primary">
+                  <li>Be respectful to others.</li>
+                  <li>No spam or self-promotion.</li>
+                  <li>Keep discussions on topic.</li>
+                  <li>No hate speech.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/topic/[topic_id]/page.tsx">
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { getTopics, createPost, getTopicPosts, Topic, Post } from "../../../lib/api";
+import PostCard from "../../../components/forum/PostCard";
+import { validatePostTitle, validatePostContent } from "../../../lib/validation";
+import ErrorToast from "../../../components/ui/ErrorToast";
+
+export default function TopicPage() {
+  const params = useParams();
+  const topicId = typeof params.topic_id === "string" ? params.topic_id : "";
+  const [topic, setTopic] = useState<Topic | null>(null);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [activeSearch, setActiveSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [formData, setFormData] = useState({ title: "", content: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const isTitleValid = formData.title.trim().length >= 5;
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setActiveSearch(searchInput);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  useEffect(() => {
+    if (!topicId) return;
+    setLoading(true);
+
+    Promise.all([
+      getTopics().then((topics) => {
+        const found = topics.find((t) => String(t.id) === String(topicId));
+        if (found) setTopic(found);
+      }),
+      getTopicPosts(topicId, "", activeSearch).then((res) => {
+        setPosts(res.data || []);
+      })
+    ])
+      .catch((err) => {
+        if (process.env.NODE_ENV === 'development') {
+          console.error(err);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, [topicId, activeSearch, refreshKey]);
+
+
+  const handleCreatePost = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    const titleError = validatePostTitle(formData.title);
+    if (titleError) {
+      setError(titleError);
+      return;
+    }
+
+    const contentError = validatePostContent(formData.content);
+    if (contentError) {
+      setError(contentError);
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await createPost({ 
+        title: formData.title, 
+        content: formData.content, 
+        topic_id: topicId 
+      });
+      setIsModalOpen(false);
+      setFormData({ title: "", content: "" });
+      setRefreshKey((prev) => prev + 1); 
+    } catch (err: any) {
+      setError(err.message || "Failed to create post.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto max-w-6xl px-4 py-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-[1fr_310px] items-start">
+          
+          <div className="flex flex-col gap-6 min-w-0">
+            <div className="flex flex-col gap-4 border-b border-border pb-6">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-3xl font-bold text-crust break-all leading-tight">
+                    {topic ? topic.name : "Loading..."}
+                  </h1>
+                  <p className="text-muted-foreground mt-1 break-words">
+                    {topic ? topic.description : "Browsing topic feed"}
+                  </p>
+                </div>
+                
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="md:hidden shrink-0 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm"
+                >
+                  Create Post
+                </button>
+              </div>
+
+              {/* SEARCH BAR */}
+              <div className="relative group">
+                <svg className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input 
+                  type="text" 
+                  placeholder={`Search in ${topic?.name || "community"}...`}
+                  className="w-full rounded-xl border border-border bg-card py-2.5 pl-10 pr-4 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              {loading ? (
+                 [1, 2, 3].map((i) => <div key={i} className="h-24 w-full animate-pulse rounded-md bg-secondary/10" />)
+              ) : posts.length === 0 ? (
+                <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/50 text-center text-muted-foreground">
+                  <p className="font-medium text-crust">No posts found</p>
+                  <p className="text-sm">Try adjusting your search terms</p>
+                </div>
+              ) : (
+                posts.map((post) => <PostCard key={post.id} post={post} />)
+              )}
+            </div>
+          </div>
+
+          <div className="hidden sticky top-24 flex-col gap-4 md:flex">
+            <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+              <div className="mb-2 flex items-center gap-2 border-b border-border pb-2">
+                <h2 className="font-bold text-crust break-all">
+                  About {topic?.name || "Community"}
+                </h2>
+              </div>
+              
+              <div className="flex flex-col gap-2 text-sm mt-3">
+                <div className="flex justify-between">
+                  <span className="font-medium text-crust">Created</span>
+                  <span className="text-muted-foreground">
+                    {topic ? new Date(topic.created_at).toLocaleDateString() : "-"}
+                  </span>
+                </div>
+              </div>
+
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="mt-4 w-full rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-primary/90 active:scale-95"
+              >
+                Create Post
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="w-full max-w-2xl rounded-2xl border border-border bg-card shadow-2xl animate-rise">
+            <div className="flex items-center justify-between border-b border-border bg-secondary/20 px-6 py-4">
+              <h2 className="text-lg font-bold text-crust">Create a Post</h2>
+              <button onClick={() => setIsModalOpen(false)} className="text-muted-foreground hover:text-crust">✕</button>
+            </div>
+            
+            <form onSubmit={handleCreatePost} className="p-6 space-y-5">
+              {error && <ErrorToast message={error} onDismiss={() => setError(null)} />}
+              <div className="space-y-1">
+                <input
+                  autoFocus
+                  className="w-full rounded-lg border border-input bg-background p-3 text-lg font-bold focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                  placeholder="Title"
+                  maxLength={250}
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                />
+                <div className={`flex justify-end text-xs ${!isTitleValid && formData.title.length > 0 ? "text-red-500 font-bold" : "text-muted-foreground"}`}>
+                    {formData.title.length < 5 && formData.title.length > 0 ? "Min 5 chars" : `${formData.title.length}/250`}
+                </div>
+              </div>
+              
+              <textarea
+                className="w-full min-h-[200px] resize-none rounded-lg border border-input bg-background p-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                placeholder="Text (optional)"
+                maxLength={600}
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              />
+              <div className="text-xs text-muted-foreground text-right -mt-2">
+                 {formData.content.length}/600
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="rounded-full border border-border px-5 py-2 text-sm font-bold text-muted-foreground hover:bg-secondary/50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting || !isTitleValid}
+                  className="rounded-full bg-primary px-6 py-2 text-sm font-bold text-white hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? "Posting..." : "Post"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/forum/CommentSection.tsx">
+"use client";
+
+import { useState, useRef } from "react";
+import { Comment, createComment } from "../../lib/api";
+import CommentItem from "./CommentItem";
+import { useAuth } from "../../hooks/AuthProvider";
+import { validateCommentContent } from "../../lib/validation";
+import ErrorToast from "../ui/ErrorToast";
+
+interface CommentSectionProps {
+  postId: string;
+  comments: Comment[];
+  onRefresh: () => void;
+}
+
+export default function CommentSection({ postId, comments, onRefresh }: CommentSectionProps) {
+  const { user } = useAuth();
+  const [content, setContent] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!content.trim()) return;
+    setError(null);
+
+    const contentError = validateCommentContent(content);
+    if (contentError) {
+      setError(contentError);
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await createComment({ content, post_id: postId });
+      setContent("");
+      if (textareaRef.current) textareaRef.current.style.height = "auto";
+      onRefresh();
+    } catch (err: any) {
+      setError(err.message || "Failed to post comment");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+      <div className="border-b border-border bg-secondary/5 p-4">
+        {user ? (
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            {error && <ErrorToast message={error} onDismiss={() => setError(null)} />}
+            <div className="flex gap-3 items-start">
+              <textarea
+              ref={textareaRef}
+              rows={1}
+              // CHANGED: max=2000
+              maxLength={2000}
+              className="flex-1 resize-none rounded-lg border border-input bg-background p-3 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
+              placeholder="What are your thoughts?"
+              value={content}
+              onChange={handleInput}
+              style={{ minHeight: "44px" }}
+            />
+              <button
+                type="submit"
+                disabled={submitting || !content.trim()}
+                className="shrink-0 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Comment
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="text-center text-sm text-muted-foreground py-2">
+            Log in to participate in the discussion.
+          </div>
+        )}
+      </div>
+
+      <div className="max-h-[800px] overflow-y-auto p-4 custom-scrollbar">
+        <div className="flex flex-col gap-6">
+          {comments.length === 0 ? (
+            <div className="text-center text-muted-foreground py-10 opacity-60">
+              No comments yet. Be the first to share your thoughts!
+            </div>
+          ) : (
+            comments.map((comment) => (
+              <CommentItem
+                key={comment.id}
+                comment={comment}
+                postId={postId}
+                onRefresh={onRefresh}
+              />
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/forum/PostCard.tsx">
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { Post } from "../../lib/api";
+
+export default function PostCard({ post }: { post: Post }) {
+  const [copied, setCopied] = useState(false);
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const url = `${window.location.origin}/post/${post.id}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: post.title, url });
+      } catch (err) {
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+      }
+    }
+  };
+
+  return (
+    <Link
+      href={`/post/${post.id}`}
+      className="group flex flex-col gap-1 rounded-md border border-border bg-card p-4 transition-all hover:border-primary/50 hover:bg-accent/50"
+    >
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <span className="font-bold text-foreground">{post.username}</span>
+        <span>•</span>
+        <span>{formatDate(post.created_at)}</span>
+      </div>
+
+      <h3 className="text-lg font-bold leading-tight text-crust group-hover:text-primary truncate">
+        {post.title}
+      </h3>
+
+      <p className="line-clamp-2 text-sm text-muted-foreground">
+        {post.content}
+      </p>
+
+      <div className="mt-2 flex items-center gap-4 text-xs font-bold text-muted-foreground">
+        <div className="flex items-center gap-1 rounded px-1 py-0.5 transition-colors hover:bg-secondary/50">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>{post.comment_count} Comments</span>
+        </div>
+        
+        <button 
+          onClick={handleShare}
+          className="flex items-center gap-1 rounded px-1 py-0.5 transition-colors hover:bg-secondary/50 hover:text-primary z-10"
+        >
+           {copied ? (
+             <>
+               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+               <span>Copied!</span>
+             </>
+           ) : (
+             <>
+               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+               <span>Share</span>
+             </>
+           )}
+        </button>
+      </div>
+    </Link>
+  );
+}
+</file>
+
+<file path="src/components/forum/TopicCard.tsx">
+"use client";
+
+import Link from "next/link";
+import { Topic } from "../../lib/api";
+
+export default function TopicCard({ topic }: { topic: Topic }) {
+  return (
+    <Link
+      href={`/topic/${topic.id}`} 
+      className="group flex w-full items-center justify-between rounded-md border border-border bg-card px-4 py-3 transition-all hover:border-primary/50 hover:bg-accent/50"
+    >
+      <div className="flex flex-col text-left min-w-0 flex-1 pr-4">
+        <span className="font-bold text-crust decoration-primary/50 underline-offset-2 group-hover:underline truncate block">
+          {topic.name}
+        </span>
+        {topic.description && (
+          <span className="truncate text-xs text-muted-foreground block">
+            {topic.description}
+          </span>
+        )}
+      </div>
+      
+      <div className="shrink-0 rounded-full bg-secondary px-4 py-1.5 text-xs font-bold text-secondary-foreground group-hover:bg-secondary/80">
+        View
+      </div>
+    </Link>
+  );
+}
+</file>
+
+<file path="src/components/forum/TopicList.tsx">
+"use client";
+
+import { Topic } from "../../lib/api";
+import TopicCard from "./TopicCard";
+
+interface TopicListProps {
+  topics: Topic[];
+  loading: boolean;
+}
+
+export default function TopicList({ topics, loading }: TopicListProps) {
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-2">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div 
+            key={i} 
+            className="h-16 w-full animate-pulse rounded-md border border-border/50 bg-secondary/20" 
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (topics.length === 0) {
+    return (
+      <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/50 text-center text-muted-foreground">
+        <p className="font-medium text-crust">No communities found</p>
+        <p className="text-sm">Be the first to start one!</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      {topics.map((topic) => (
+        <TopicCard key={topic.id} topic={topic} />
+      ))}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/Dashboard.tsx">
+"use client";
+
+import { useEffect, useState } from "react";
+import { getTopics, createTopic, Topic } from "../lib/api";
+import TopicList from "./forum/TopicList";
+import { validateTopicName, validateTopicDescription } from "../lib/validation";
+import ErrorToast from "./ui/ErrorToast";
+
+export default function Dashboard() {
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: "", description: "" });
+  const [creating, setCreating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getTopics().then(setTopics).finally(() => setLoading(false));
+  }, []);
+
+  const filteredTopics = topics.filter((t) => 
+    t.name.toLowerCase().includes(search.toLowerCase()) || 
+    t.description.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    const nameError = validateTopicName(formData.name);
+    if (nameError) {
+      setError(nameError);
+      return;
+    }
+
+    const descError = validateTopicDescription(formData.description);
+    if (descError) {
+      setError(descError);
+      return;
+    }
+
+    setCreating(true);
+    try {
+      await createTopic(formData);
+      setIsModalOpen(false);
+      setFormData({ name: "", description: "" });
+      getTopics().then(setTopics);
+    } catch (err: any) {
+      setError(err.message || "Failed to create topic. Name might be taken.");
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto max-w-6xl px-4 py-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_320px] items-start">
+          
+          {/* ADDED: min-w-0 prevents grid blowout */}
+          <div className="flex flex-col gap-6 min-w-0">
+            <h1 className="text-2xl font-bold text-crust">Communities</h1>
+            
+            <div className="relative">
+              <svg className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input 
+                type="text" 
+                placeholder="Search communities..." 
+                className="w-full rounded-xl border border-border bg-card py-3 pl-10 pr-4 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            <TopicList topics={filteredTopics} loading={loading} />
+          </div>
+
+          <div className="hidden sticky top-24 md:flex flex-col gap-6">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="text-xl">🍞</span>
+                <h2 className="font-bold text-crust">Home</h2>
+              </div>
+              <p className="mb-6 text-sm text-muted-foreground leading-relaxed">
+                Welcome to ThreadTalk! Check in with your favorite communities and have fun yapping! :)
+              </p>
+              <hr className="border-border mb-6" />
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-primary/90 active:scale-95"
+              >
+                Create Community
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button 
+        onClick={() => setIsModalOpen(true)}
+        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg md:hidden hover:bg-primary/90"
+      >
+        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-2xl animate-rise">
+            <div className="flex items-center justify-between border-b border-border bg-secondary/10 px-6 py-4">
+              <h2 className="font-bold text-crust">Create Community</h2>
+              <button onClick={() => setIsModalOpen(false)} className="text-muted-foreground hover:text-crust">✕</button>
+            </div>
+            
+            <form onSubmit={handleCreate} className="flex flex-col gap-4 p-6">
+              {error && <ErrorToast message={error} onDismiss={() => setError(null)} />}
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold uppercase text-muted-foreground">Name</label>
+                <input
+                  autoFocus
+                  className="w-full rounded-lg border border-input bg-background p-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                  placeholder="breadlovers"
+                  maxLength={50}
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                />
+              </div>
+              
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold uppercase text-muted-foreground">Description</label>
+                <textarea
+                  className="w-full resize-none rounded-lg border border-input bg-background p-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                  placeholder="What is this community about?"
+                  rows={3}
+                  maxLength={600}
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                />
+                <div className="text-xs text-muted-foreground text-right">
+                    {formData.description.length}/600
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary">Cancel</button>
+                <button type="submit" disabled={creating} className="rounded-full bg-primary px-6 py-2 text-sm font-bold text-white hover:bg-primary/90 disabled:opacity-50">
+                  {creating ? "Creating..." : "Create"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/Navbar.tsx">
+"use client";
+
+import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useAuth } from "../hooks/AuthProvider";
+
+export default function Navbar() {
+  const { user, logout } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/"); 
+    router.refresh();
+  };
+
+  if (!mounted) {
+    return (
+      <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
+        <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+          <div className="flex items-center gap-2.5">
+             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-xl">🍞</div>
+             <span className="font-display text-xl font-bold tracking-tight text-crust">ThreadTalk</span>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+  
+  const isAuthPage = pathname === "/";
+
+  return (
+    <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
+      <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        
+        <Link href="/" className="group flex items-center gap-2.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-xl transition-transform group-hover:scale-105">
+            🍞
+          </div>
+          <span className="font-display text-xl font-bold tracking-tight text-crust">ThreadTalk</span>
+        </Link>
+
+        <div className="flex items-center gap-4">
+          {user ? (
+            <>
+              <div className="text-sm font-bold text-crust">
+                 {user.username}
+              </div>
+              <button 
+                onClick={handleLogout} 
+                className="p-1 text-muted-foreground transition-colors hover:text-destructive"
+                title="Logout"
+              >
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+                </svg>
+              </button>
+            </>
+          ) : (
+            !isAuthPage && (
+              <>
+                <Link 
+                  href="/" 
+                  className="text-sm font-bold text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Log In
+                </Link>
+                <Link 
+                  href="/" 
+                  className="rounded-full bg-primary px-5 py-2 text-sm font-bold text-white shadow-sm hover:bg-primary/90 transition-all active:scale-95"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )
+          )}
+        </div>
+      </div>
+    </nav>
+  );
+}
+</file>
+
+<file path="src/lib/api.ts">
+import axios, { AxiosError } from 'axios';
+
+const api = axios.create({
+  baseURL: '', // process.env.NEXT_PUBLIC_API_URL
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true,
+});
+
+const MAX_RETRIES = 10;
+const RETRYABLE_STATUSES = [408, 500, 503];
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError<{ error: string }>) => {
+    const config = error.config as any;
+    const status = error.response?.status;
+    
+    // Handle rate limiting (429)
+    if (status === 429) {
+      const retryAfter = parseInt(error.response?.headers['retry-after'] || '60', 10) * 1000;
+      if (config && !config._rateLimitRetry) {
+        config._rateLimitRetry = true;
+        await new Promise(resolve => setTimeout(resolve, retryAfter));
+        return api(config);
+      }
+    }
+    
+    // Handle retryable errors (408, 500, 503)
+    if (status && RETRYABLE_STATUSES.includes(status) && config && !config._retry) {
+      config._retry = config._retry || 0;
+      
+      if (config._retry < MAX_RETRIES) {
+        config._retry += 1;
+        const delay = Math.pow(2, config._retry - 1) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return api(config);
+      }
+    }
+    
+    throw new Error(error.response?.data?.error || error.message);
+  }
+);
+
+export interface User {
+  id: string;
+  username: string;
+  email?: string;
+  created_at: string;
+}
+
+export interface Topic {
+  id: string;
+  name: string;
+  description: string;
+  created_at: string;
+}
+
+export interface Post {
+  id: string;
+  title: string;
+  content: string;
+  user_id: string;
+  topic_id: string;
+  created_at: string;
+  username: string;
+  comment_count: number;
+}
+
+export interface PaginatedPosts {
+  data: Post[];
+  next_cursor: string;
+}
+
+export interface PostDetailsResponse {
+  post: Post;
+  comments: Comment[];
+}
+
+export interface Comment {
+  id: string;
+  content: string;
+  user_id: string;
+  post_id: string;
+  parent_id?: string;
+  created_at: string;
+  username: string;
+  children?: Comment[];
+}
+
+export interface SignupRequest {
+  username: string;
+  password: string;
+}
+
+export type SignupResponse = User | { 
+  message: string;
+  user: User;
+}
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export type LoginResponse = User | { 
+  message: string;
+  user: User;
+}
+
+export interface LogoutResponse {
+  message: string;
+}
+
+export interface CreateTopicRequest {
+  name: string;
+  description: string;
+}
+
+// Create Topic Response
+
+export interface CreatePostRequest {
+  title: string;
+  content: string;
+  topic_id: string;
+}
+
+// Create Post Response
+
+export interface CreateCommentRequest {
+  content: string;
+  post_id: string;
+  parent_id?: string;
+}
+
+export type GetTopicsResponse = Topic[];
+
+export const signup = async (data: SignupRequest): Promise<SignupResponse> => {
+  const response = await api.post<SignupResponse>('/auth/signup', data);
+  return response.data;
+};
+
+export const login = async (data: LoginRequest): Promise<LoginResponse> => {
+  const response = await api.post<LoginResponse>('/auth/login', data);
+  return response.data;
+};
+
+export const logout = async (): Promise<LogoutResponse> => {
+  const response = await api.post<LogoutResponse>('/auth/logout');
+  return response.data;
+};
+
+export const getProfile = async (): Promise<User | null> => {
+  try {
+    const response = await api.get<User>('/api/profile');
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const createTopic = async (data: CreateTopicRequest): Promise<Topic> => {
+  const response = await api.post<Topic>('/api/topics', data);
+  return response.data;
+};
+
+export const getTopics = async (): Promise<Topic[]> => {
+  const response = await api.get<Topic[]>('/topics');
+  return response.data;
+};
+
+export const getTopicPosts = async (topicId: string, cursor = '', search = ''): Promise<PaginatedPosts> => {
+  const query = new URLSearchParams({ cursor });
+  if (search) query.append("search", search);
+  const response = await api.get<PaginatedPosts>(`/topics/${topicId}/posts?${query.toString()}`);
+  return response.data;
+};
+
+export const createPost = async (data: CreatePostRequest): Promise<Post> => {
+  const response = await api.post<Post>('/api/posts', data);
+  return response.data;
+};
+
+export const getPostDetails = async (postId: string): Promise<PostDetailsResponse> => {
+  const response = await api.get<PostDetailsResponse>(`/posts/${postId}`);
+  return response.data;
+};
+
+export const createComment = async (data: CreateCommentRequest): Promise<Comment> => {
+  const response = await api.post<Comment>('/api/comments', data);
+  return response.data;
+};
+
+export default api;
+</file>
+
+<file path="README.md">
+# ThreadTalk Frontend
+
+**threadtalk-frontend** is a production-ready frontend for a lightweight threaded discussion/forum application. Built with Next.js and TypeScript, it provides a modern, responsive UI for community-driven discussions with authentication, topic management, post creation, and nested comment threads.
+
+**Backend Repository Here:** [https://github.com/v1-nce/threadtalk-backend](https://github.com/v1-nce/threadtalk-backend)
+**Deployed Application Here:** [https://threadtalk-app.vercel.app](https://threadtalk-app.vercel.app)
+
+## Features
+
+- **Authentication**: Secure cookie-based authentication with signup, login, and logout
+- **Topic Management**: Browse and create discussion topics/communities
+- **Post System**: Create and view posts within topics with search functionality
+- **Share System**: Non-users can view posts and comments without signing up for an account
+- **Threaded Comments**: Nested comment threads with reply functionality
+- **Real-time Updates**: Automatic refresh after creating posts and comments
+- **Responsive Design**: Mobile-first design with Tailwind CSS
+- **Production Ready**: Error handling, input validation, retry logic, and rate limit handling
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **UI**: Tailwind CSS
+- **HTTP Client**: Axios with cookie support
+- **State Management**: React Context API (AuthProvider)
+- **Validation**: Client-side validation matching backend rules
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── page.tsx           # Home page (auth/dashboard)
+│   ├── post/[post_id]/    # Post detail page
+│   └── topic/[topic_id]/  # Topic page with posts
+├── components/
+│   ├── forum/             # Forum-specific components
+│   │   ├── CommentItem.tsx
+│   │   ├── CommentSection.tsx
+│   │   ├── PostCard.tsx
+│   │   ├── PostList.tsx
+│   │   ├── TopicCard.tsx
+│   │   └── TopicList.tsx
+│   ├── ui/                # Reusable UI components
+│   │   └── ErrorToast.tsx
+│   ├── AuthPage.tsx       # Authentication page
+│   ├── Dashboard.tsx      # Main dashboard
+│   ├── LoginForm.tsx
+│   ├── RegisterForm.tsx
+│   └── Navbar.tsx
+├── hooks/
+│   └── AuthProvider.tsx   # Authentication context
+└── lib/
+    ├── api.ts             # API client with retry/rate limit logic
+    └── validation.ts      # Input validation utilities
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ (recommended for Next.js 16)
+- npm or yarn
+
+### Installation
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create a `.env.local` file at the project root:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:4000
+```
+
+Replace `http://localhost:4000` with your backend API URL.
+
+3. Run the development server:
+
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:3000`.
+
+### Build for Production
+
+```bash
+npm run build
+npm run start
+```
+
+### Linting
+
+```bash
+npm run lint
+```
+
+## API Integration
+
+The frontend communicates with a REST API backend. The API client (`src/lib/api.ts`) includes:
+
+- **Retry Logic**: Automatic retry with exponential backoff for retryable errors (408, 500, 503)
+- **Rate Limiting**: Handles 429 responses with proper backoff
+- **Error Handling**: Comprehensive error handling with user-friendly messages
+- **Cookie Authentication**: Uses HTTP-only cookies for secure authentication
+- **Flexible Response Types**: Handles both wrapped and direct API responses
+
+### API Endpoints Used
+
+- `POST /auth/signup` - User registration
+- `POST /auth/login` - User authentication
+- `POST /auth/logout` - User logout
+- `GET /api/profile` - Get authenticated user profile
+- `GET /topics` - List all topics
+- `POST /api/topics` - Create a new topic
+- `GET /topics/:topic_id/posts` - Get posts in a topic (with pagination and search)
+- `POST /api/posts` - Create a new post
+- `GET /posts/:post_id` - Get post details with comments
+- `POST /api/comments` - Create a comment (or reply)
+
+## Input Validation
+
+Client-side validation is implemented to match backend rules:
+
+- **Username**: 3-50 characters, alphanumeric + underscore
+- **Password**: Minimum 8 characters
+- **Post Title**: 5-250 characters
+- **Post Content**: Maximum 600 characters
+- **Comment Content**: Maximum 2000 characters
+- **Topic Name**: 1-50 characters
+- **Topic Description**: Maximum 600 characters
+
+## Error Handling
+
+- All API errors are caught and displayed with user-friendly messages
+- Error toast notifications auto-dismiss after 5 seconds
+- Form validation errors are shown inline
+- Network errors are handled gracefully with retry logic
+
+## Performance Optimizations
+
+- **Debounced Search**: 300ms debounce on search input to reduce API calls
+- **Parallel API Calls**: Independent API calls are parallelized where possible
+- **Optimized Re-renders**: Proper use of React hooks and callbacks
+
+## Authentication Flow
+
+1. User signs up or logs in via `/auth/signup` or `/auth/login`
+2. Backend sets an HTTP-only cookie (`auth_token`)
+3. Frontend automatically includes cookies in subsequent requests via `withCredentials: true`
+4. `AuthProvider` checks authentication status on app load via `getProfile()`
+5. Protected routes and features are conditionally rendered based on auth state
+
+## Development
+
+### Key Components
+
+- **AuthProvider**: Manages authentication state and provides auth methods to the app
+- **Dashboard**: Main page showing all topics with search and create functionality
+- **TopicPage**: Displays posts within a topic with search and post creation
+- **PostPage**: Shows post details with nested comment threads
+- **CommentSection**: Handles comment creation and displays comment tree
+
+### Code Style
+
+- TypeScript for type safety
+- Functional components with React hooks
+- Tailwind CSS for styling
+- ESLint for code quality
+
+## Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `NEXT_PUBLIC_API_URL` | Backend API base URL | Yes |
+
+## Backend Requirements
+
+- Expose all endpoints listed in the API Integration section
+- Support CORS with credentials (cookies)
+- Return errors in format: `{ error: "message" }`
+- Set HTTP-only cookies for authentication
+- Support pagination via `cursor` parameter for posts
+- Support search via `search` query parameter
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run `npm run lint` to check for issues
+5. Test your changes locally
+6. Submit a pull request
+</file>
+
+</files>
