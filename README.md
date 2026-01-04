@@ -5,8 +5,6 @@
 **Backend Repository Here:** [https://github.com/v1-nce/threadtalk-backend](https://github.com/v1-nce/threadtalk-backend)
 **Deployed Application Here:** [https://threadtalk-app.vercel.app](https://threadtalk-app.vercel.app)
 
-Hello
-
 ## Features
 
 - **Authentication**: Secure cookie-based authentication with signup, login, and logout
