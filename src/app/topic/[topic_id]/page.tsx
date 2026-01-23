@@ -132,7 +132,17 @@ export default function TopicPage() {
                   <p className="text-sm">Try adjusting your search terms</p>
                 </div>
               ) : (
-                posts.map((post) => <PostCard key={post.id} post={post} />)
+                posts.map((post) => (
+                  <PostCard 
+                    key={post.id} 
+                    post={post} 
+                    onDelete={() => {
+                      getTopicPosts(topicId, "", activeSearch).then((res) => {
+                        setPosts(res.data || []);
+                      });
+                    }} 
+                  />
+                ))
               )}
             </div>
           </div>

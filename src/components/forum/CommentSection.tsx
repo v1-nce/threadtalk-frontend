@@ -60,16 +60,22 @@ export default function CommentSection({ postId, comments, onRefresh }: CommentS
             {error && <ErrorToast message={error} onDismiss={() => setError(null)} />}
             <div className="flex gap-3 items-start">
               <textarea
-              ref={textareaRef}
-              rows={1}
-              // CHANGED: max=2000
-              maxLength={2000}
-              className="flex-1 resize-none rounded-lg border border-input bg-background p-3 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
-              placeholder="What are your thoughts?"
-              value={content}
-              onChange={handleInput}
-              style={{ minHeight: "44px" }}
-            />
+                ref={textareaRef}
+                rows={1}
+                // CHANGED: max=2000
+                maxLength={2000}
+                className="flex-1 resize-none rounded-lg border border-input bg-background p-3 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-muted-foreground"
+                placeholder="What are your thoughts?"
+                value={content}
+                onChange={handleInput}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit(e);
+                  }
+                }}
+                style={{ minHeight: "44px" }}
+              />
               <button
                 type="submit"
                 disabled={submitting || !content.trim()}

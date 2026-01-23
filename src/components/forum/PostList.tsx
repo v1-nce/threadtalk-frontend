@@ -12,7 +12,7 @@ export default function PostList({ topicId }: PostListProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchPosts = () => {
     if (!topicId) return;
 
     getTopicPosts(topicId)
@@ -24,7 +24,15 @@ export default function PostList({ topicId }: PostListProps) {
         setPosts([]);
       })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchPosts();
   }, [topicId]);
+
+  const handleDelete = () => {
+    fetchPosts();
+  };
 
   if (loading) {
     return (
@@ -48,7 +56,7 @@ export default function PostList({ topicId }: PostListProps) {
   return (
     <div className="flex flex-col gap-2">
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} onDelete={handleDelete} />
       ))}
     </div>
   );

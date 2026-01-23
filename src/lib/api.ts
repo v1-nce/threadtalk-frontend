@@ -192,4 +192,12 @@ export const createComment = async (data: CreateCommentRequest): Promise<Comment
   return response.data;
 };
 
+export const deletePost = async (postId: string): Promise<void> => {
+  await api.delete(`/api/posts/${postId}`);
+};
+
+export const deleteComment = async (commentId: string): Promise<void> => {
+  await api.delete(`/api/comments/${commentId}`);
+};
+
 export default api;
