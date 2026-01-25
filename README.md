@@ -281,7 +281,7 @@ The backend must implement the following to work with this frontend:
 1. Make changes to source files
 2. Development server auto-reloads on file changes
 3. Check browser console for errors
-4. Run `npm run lint` before committing
+4. Run `npm run lint` and `npm run build`before committing
 5. Test authentication flow, CRUD operations, and error states
 6. Build production bundle to verify no build errors
 
