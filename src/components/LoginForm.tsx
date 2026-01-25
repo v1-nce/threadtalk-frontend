@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { login } from "../lib/api";
+import { useAuthStore } from "../stores";
 import { validateUsername } from "../lib/validation";
 
 export default function LoginForm() {
+  const login = useAuthStore((s) => s.login);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({ username: "", password: "" });
@@ -22,7 +23,7 @@ export default function LoginForm() {
     setLoading(true);
     try {
       await login(formData);
-      window.location.reload(); 
+      window.location.reload();
     } catch (err: any) {
       setError(err.message || "Login failed");
     } finally {

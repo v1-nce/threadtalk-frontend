@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { getTopics, createPost, getTopicPosts, Topic, Post } from "../../../lib/api";
+import { useTopicStore, usePostStore } from "../../../stores";
 import PostCard from "../../../components/forum/PostCard";
 import { validatePostTitle, validatePostContent } from "../../../lib/validation";
 import ErrorToast from "../../../components/ui/ErrorToast";
@@ -10,13 +10,16 @@ import ErrorToast from "../../../components/ui/ErrorToast";
 export default function TopicPage() {
   const params = useParams();
   const topicId = typeof params.topic_id === "string" ? params.topic_id : "";
-  const [topic, setTopic] = useState<Topic | null>(null);
-  const [posts, setPosts] = useState<Post[]>([]);
+
+  const { topics, fetchTopics, getTopicById } = useTopicStore();
+  const { postsByTopic, loading, fetchTopicPosts, createPost } = usePostStore();
+
+  const topic = getTopicById(topicId);
+  const posts = postsByTopic[topicId] || [];
+
   const [searchInput, setSearchInput] = useState("");
   const [activeSearch, setActiveSearch] = useState("");
-  const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
   const [formData, setFormData] = useState({ title: "", content: "" });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -32,24 +35,11 @@ export default function TopicPage() {
 
   useEffect(() => {
     if (!topicId) return;
-    setLoading(true);
-
-    Promise.all([
-      getTopics().then((topics) => {
-        const found = topics.find((t) => String(t.id) === String(topicId));
-        if (found) setTopic(found);
-      }),
-      getTopicPosts(topicId, "", activeSearch).then((res) => {
-        setPosts(res.data || []);
-      })
-    ])
-      .catch((err) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.error(err);
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [topicId, activeSearch, refreshKey]);
+    if (topics.length === 0) {
+      fetchTopics();
+    }
+    fetchTopicPosts(topicId, activeSearch);
+  }, [topicId, activeSearch, topics.length, fetchTopics, fetchTopicPosts]);
 
 
   const handleCreatePost = async (e: React.FormEvent) => {
@@ -77,7 +67,6 @@ export default function TopicPage() {
       });
       setIsModalOpen(false);
       setFormData({ title: "", content: "" });
-      setRefreshKey((prev) => prev + 1);
     } catch (err: any) {
       setError(err.message || "Failed to create post.");
     } finally {
@@ -136,11 +125,7 @@ export default function TopicPage() {
                   <PostCard
                     key={post.id}
                     post={post}
-                    onDelete={() => {
-                      getTopicPosts(topicId, "", activeSearch).then((res) => {
-                        setPosts(res.data || []);
-                      });
-                    }}
+                    onDelete={() => fetchTopicPosts(topicId, activeSearch)}
                   />
                 ))
               )}

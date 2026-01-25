@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Comment, createComment, deleteComment } from "../../lib/api";
-import { useAuth } from "../../hooks/AuthProvider";
+import { useAuthStore, usePostStore } from "../../stores";
 import { validateCommentContent } from "../../lib/validation";
 import ErrorToast from "../ui/ErrorToast";
 import ConfirmDialog from "../ui/ConfirmDialog";
+import type { Comment } from "../../lib/api";
 
 interface CommentItemProps {
   comment: Comment;
@@ -15,7 +15,8 @@ interface CommentItemProps {
 }
 
 export default function CommentItem({ comment, postId, onRefresh, depth = 0 }: CommentItemProps) {
-  const { user } = useAuth();
+  const user = useAuthStore((s) => s.user);
+  const { createComment, deleteComment } = usePostStore();
   const [isReplying, setIsReplying] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -63,7 +64,7 @@ export default function CommentItem({ comment, postId, onRefresh, depth = 0 }: C
     setShowConfirm(false);
     setDeleting(true);
     try {
-      await deleteComment(comment.id);
+      await deleteComment(comment.id, postId);
       onRefresh();
     } catch (err: any) {
       setError(err.message || "Failed to delete comment");

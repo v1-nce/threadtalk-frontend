@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Comment, createComment } from "../../lib/api";
+import { useAuthStore, usePostStore } from "../../stores";
 import CommentItem from "./CommentItem";
-import { useAuth } from "../../hooks/AuthProvider";
 import { validateCommentContent } from "../../lib/validation";
 import ErrorToast from "../ui/ErrorToast";
+import type { Comment } from "../../lib/api";
 
 interface CommentSectionProps {
   postId: string;
@@ -14,7 +14,8 @@ interface CommentSectionProps {
 }
 
 export default function CommentSection({ postId, comments, onRefresh }: CommentSectionProps) {
-  const { user } = useAuth();
+  const user = useAuthStore((s) => s.user);
+  const createComment = usePostStore((s) => s.createComment);
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);

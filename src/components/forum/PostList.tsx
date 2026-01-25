@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getTopicPosts, Post } from "../../lib/api";
+import { useEffect } from "react";
+import { usePostStore } from "../../stores";
 import PostCard from "./PostCard";
 
 interface PostListProps {
@@ -9,30 +9,14 @@ interface PostListProps {
 }
 
 export default function PostList({ topicId }: PostListProps) {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchPosts = () => {
-    if (!topicId) return;
-
-    getTopicPosts(topicId)
-      .then((res) => {
-        setPosts(res.data || []);
-      })
-      .catch((err) => {
-        console.error("Failed to load posts:", err);
-        setPosts([]);
-      })
-      .finally(() => setLoading(false));
-  };
+  const { postsByTopic, loading, fetchTopicPosts } = usePostStore();
+  const posts = postsByTopic[topicId] || [];
 
   useEffect(() => {
-    fetchPosts();
-  }, [topicId]);
-
-  const handleDelete = () => {
-    fetchPosts();
-  };
+    if (topicId) {
+      fetchTopicPosts(topicId);
+    }
+  }, [topicId, fetchTopicPosts]);
 
   if (loading) {
     return (
@@ -56,7 +40,7 @@ export default function PostList({ topicId }: PostListProps) {
   return (
     <div className="flex flex-col gap-2">
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} onDelete={handleDelete} />
+        <PostCard key={post.id} post={post} onDelete={() => fetchTopicPosts(topicId)} />
       ))}
     </div>
   );

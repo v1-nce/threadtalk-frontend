@@ -28,7 +28,7 @@ Threadtalk-frontend is a production-ready frontend for a lightweight threaded di
 | **Language** | TypeScript | 5.x |
 | **Styling** | Tailwind CSS | 4.1.17 |
 | **HTTP Client** | Axios | 1.13.2 |
-| **State Management** | React Context API | - |
+| **State Management** | Zustand | 5.x |
 | **UI Components** | Custom (forum/, ui/) | - |
 
 ### Prerequisites
@@ -44,7 +44,7 @@ Threadtalk-frontend is a production-ready frontend for a lightweight threaded di
 src/
 ├── app/                    # Next.js App Router pages
 │   ├── page.tsx           # Home page (auth/dashboard)
-│   ├── layout.tsx         # Root layout with AuthProvider
+│   ├── layout.tsx         # Root layout
 │   ├── globals.css        # Tailwind configuration & design tokens
 │   ├── post/[post_id]/    # Post detail page
 │   └── topic/[topic_id]/  # Topic page with posts
@@ -64,8 +64,11 @@ src/
 │   ├── LoginForm.tsx      # Login form with validation
 │   ├── RegisterForm.tsx   # Registration form with validation
 │   └── Navbar.tsx         # Navigation bar
-├── hooks/
-│   └── AuthProvider.tsx   # Authentication context provider
+├── stores/                # Zustand state management
+│   ├── authStore.ts       # Auth state (user, login, logout)
+│   ├── topicStore.ts      # Topics state & actions
+│   ├── postStore.ts       # Posts & comments state
+│   └── index.ts           # Barrel exports
 └── lib/
     ├── api.ts             # API client with retry/rate limit logic
     └── validation.ts      # Input validation utilities
@@ -176,52 +179,49 @@ Client-side validation is implemented in `src/lib/validation.ts` to match backen
 1. User signs up or logs in via `/auth/signup` or `/auth/login`
 2. Backend sets an HTTP-only cookie (`auth_token`)
 3. Frontend automatically includes cookies in subsequent requests via `withCredentials: true`
-4. `AuthProvider` checks authentication status on app load via `getProfile()`
+4. `authStore` initializes on app load, checking session via `getProfile()`
 5. Protected routes and features are conditionally rendered based on auth state
-6. User can logout, which clears the cookie and resets auth state
+6. User can logout, which clears the cookie and resets Zustand state
 
 ---
 
 ## Key Components
 
-### AuthProvider (`src/hooks/AuthProvider.tsx`)
+### Zustand Stores (`src/stores/`)
 
-- Manages global authentication state
-- Provides `user`, `loading`, `signup()`, `login()`, `logout()` to the entire app
-- Automatically fetches user profile on mount
+| Store | Responsibility |
+|-------|----------------|
+| `authStore` | User session, login/signup/logout actions |
+| `topicStore` | Topics list, create topic, lookup by ID |
+| `postStore` | Posts per topic, comments, CRUD operations |
+
+- **No provider wrappers** — stores imported directly where needed
+- **Automatic state refresh** — mutations trigger data re-fetch
+- **Selector optimization** — components subscribe only to needed slices
 
 ### Dashboard (`src/components/Dashboard.tsx`)
 
 - Main page showing all topics with search and create functionality
-- Includes modal for creating new topics with validation
+- Uses `topicStore` for centralized topic state
 - Mobile-responsive with sticky sidebar
 
 ### TopicPage (`src/app/topic/[topic_id]/page.tsx`)
 
 - Displays posts within a specific topic
+- Uses `topicStore` + `postStore` for data
 - Includes search with 300ms debounce to reduce API calls
-- Modal for creating new posts with character counters
-- Mobile-responsive layout
 
 ### PostPage (`src/app/post/[post_id]/page.tsx`)
 
 - Shows post details with metadata (author, date, comment count)
-- Displays nested comment tree with unlimited depth
+- Uses `postStore` for post and comments state
 - Share functionality (native share API or clipboard fallback)
-- Delete functionality for post owners
-
-### CommentSection (`src/components/forum/CommentSection.tsx`)
-
-- Handles comment creation with auto-expanding textarea
-- Displays comment tree recursively via `CommentItem`
-- Keyboard shortcuts (Enter to submit, Shift+Enter for newline)
 
 ### CommentItem (`src/components/forum/CommentItem.tsx`)
 
 - Renders individual comments with reply functionality
-- Supports nested replies with visual indentation
-- Shows deleted state for removed comments
-- Delete functionality for comment owners
+- Supports nested replies with visual indentation (recursive component)
+- Uses `authStore` for ownership checks, `postStore` for mutations
 
 ---
 

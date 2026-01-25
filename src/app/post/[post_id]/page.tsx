@@ -2,36 +2,30 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getPostDetails, Post, Comment, deletePost } from "../../../lib/api";
+import { useAuthStore, usePostStore } from "../../../stores";
 import CommentSection from "../../../components/forum/CommentSection";
-import { useAuth } from "../../../hooks/AuthProvider";
 import ErrorToast from "../../../components/ui/ErrorToast";
 import ConfirmDialog from "../../../components/ui/ConfirmDialog";
 
 export default function PostPage() {
   const params = useParams();
   const router = useRouter();
-  const { user } = useAuth();
+  const user = useAuthStore((s) => s.user);
   const postId = typeof params.post_id === "string" ? params.post_id : "";
 
-  const [post, setPost] = useState<Post | null>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { currentPost, comments, loading, fetchPostDetails, deletePost } = usePostStore();
+  const post = currentPost;
+
   const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(() => {
-    if (!postId) return;
-    getPostDetails(postId)
-      .then((data) => {
-        setPost(data.post);
-        setComments(data.comments || []);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [postId]);
+    if (postId) {
+      fetchPostDetails(postId);
+    }
+  }, [postId, fetchPostDetails]);
 
   useEffect(() => {
     fetchData();
@@ -58,9 +52,8 @@ export default function PostPage() {
     try {
       await deletePost(post.id);
       try {
-        const data = await getPostDetails(post.id);
-        setPost(data.post);
-      } catch (e) {
+        await fetchPostDetails(post.id);
+      } catch {
         router.push(`/topic/${post.topic_id}`);
       }
     } catch (err: any) {

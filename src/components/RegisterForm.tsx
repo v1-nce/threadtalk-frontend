@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signup } from "../lib/api";
+import { useAuthStore } from "../stores";
 import { validateUsername, validatePassword } from "../lib/validation";
 
 interface RegisterFormProps {
@@ -9,6 +9,7 @@ interface RegisterFormProps {
 }
 
 export default function RegisterForm({ onSuccess }: RegisterFormProps) {
+  const signup = useAuthStore((s) => s.signup);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({ username: "", password: "", confirmPassword: "" });
@@ -48,7 +49,7 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 animate-rise" autoComplete="off">
       {error && <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>}
-      
+
       <div className="space-y-2">
         <label className="text-sm font-medium text-foreground/80">Username</label>
         <input

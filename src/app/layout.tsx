@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import React from "react";
-import { AuthProvider } from "../hooks/AuthProvider";
 import Navbar from "../components/Navbar";
 import "./globals.css";
 
@@ -13,10 +12,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <Navbar />
-          {children}
-        </AuthProvider>
+        <Navbar />
+        {children}
       </body>
     </html>
   );

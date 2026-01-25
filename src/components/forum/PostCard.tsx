@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Post, deletePost } from "../../lib/api";
-import { useAuth } from "../../hooks/AuthProvider";
+import { useAuthStore } from "../../stores";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import ErrorToast from "../ui/ErrorToast";
 
@@ -13,7 +13,7 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post, onDelete }: PostCardProps) {
-  const { user } = useAuth();
+  const user = useAuthStore((s) => s.user);
   const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
