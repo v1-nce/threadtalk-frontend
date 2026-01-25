@@ -179,12 +179,12 @@ export default function PostPage() {
               </div>
 
               <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Posting Rules</h3>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Comment Rules</h3>
                 <ul className="text-sm space-y-2 text-crust/80 list-disc pl-4 marker:text-primary">
-                  <li>Be respectful to others.</li>
-                  <li>No spam or self-promotion.</li>
-                  <li>Keep discussions on topic.</li>
-                  <li>No hate speech.</li>
+                  <li>Be respectful and constructive.</li>
+                  <li>Stay on topic with the post.</li>
+                  <li>No personal attacks.</li>
+                  <li>Max 2000 characters.</li>
                 </ul>
               </div>
             </div>

@@ -70,14 +70,14 @@ export default function TopicPage() {
 
     setSubmitting(true);
     try {
-      await createPost({ 
-        title: formData.title, 
-        content: formData.content, 
-        topic_id: topicId 
+      await createPost({
+        title: formData.title,
+        content: formData.content,
+        topic_id: topicId
       });
       setIsModalOpen(false);
       setFormData({ title: "", content: "" });
-      setRefreshKey((prev) => prev + 1); 
+      setRefreshKey((prev) => prev + 1);
     } catch (err: any) {
       setError(err.message || "Failed to create post.");
     } finally {
@@ -89,7 +89,7 @@ export default function TopicPage() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-6xl px-4 py-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-[1fr_310px] items-start">
-          
+
           <div className="flex flex-col gap-6 min-w-0">
             <div className="flex flex-col gap-4 border-b border-border pb-6">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
@@ -101,8 +101,8 @@ export default function TopicPage() {
                     {topic ? topic.description : "Browsing topic feed"}
                   </p>
                 </div>
-                
-                <button 
+
+                <button
                   onClick={() => setIsModalOpen(true)}
                   className="md:hidden shrink-0 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm"
                 >
@@ -112,9 +112,9 @@ export default function TopicPage() {
 
               {/* SEARCH BAR */}
               <div className="relative group">
-                <svg className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                <input 
-                  type="text" 
+                <svg className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
+                <input
+                  type="text"
                   placeholder={`Search in ${topic?.name || "community"}...`}
                   className="w-full rounded-xl border border-border bg-card py-2.5 pl-10 pr-4 text-sm outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary"
                   value={searchInput}
@@ -125,7 +125,7 @@ export default function TopicPage() {
 
             <div className="flex flex-col gap-2">
               {loading ? (
-                 [1, 2, 3].map((i) => <div key={i} className="h-24 w-full animate-pulse rounded-md bg-secondary/10" />)
+                [1, 2, 3].map((i) => <div key={i} className="h-24 w-full animate-pulse rounded-md bg-secondary/10" />)
               ) : posts.length === 0 ? (
                 <div className="flex h-64 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/50 text-center text-muted-foreground">
                   <p className="font-medium text-crust">No posts found</p>
@@ -133,14 +133,14 @@ export default function TopicPage() {
                 </div>
               ) : (
                 posts.map((post) => (
-                  <PostCard 
-                    key={post.id} 
-                    post={post} 
+                  <PostCard
+                    key={post.id}
+                    post={post}
                     onDelete={() => {
                       getTopicPosts(topicId, "", activeSearch).then((res) => {
                         setPosts(res.data || []);
                       });
-                    }} 
+                    }}
                   />
                 ))
               )}
@@ -154,7 +154,7 @@ export default function TopicPage() {
                   About {topic?.name || "Community"}
                 </h2>
               </div>
-              
+
               <div className="flex flex-col gap-2 text-sm mt-3">
                 <div className="flex justify-between">
                   <span className="font-medium text-crust">Created</span>
@@ -164,12 +164,22 @@ export default function TopicPage() {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={() => setIsModalOpen(true)}
                 className="mt-4 w-full rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-primary/90 active:scale-95"
               >
                 Create Post
               </button>
+            </div>
+
+            <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Posting Rules</h3>
+              <ul className="text-sm space-y-2 text-crust/80 list-disc pl-4 marker:text-primary">
+                <li>Be respectful to others.</li>
+                <li>No spam or self-promotion.</li>
+                <li>Keep discussions on topic.</li>
+                <li>No hate speech.</li>
+              </ul>
             </div>
           </div>
 
@@ -183,7 +193,7 @@ export default function TopicPage() {
               <h2 className="text-lg font-bold text-crust">Create a Post</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-muted-foreground hover:text-crust">✕</button>
             </div>
-            
+
             <form onSubmit={handleCreatePost} className="p-6 space-y-5">
               {error && <ErrorToast message={error} onDismiss={() => setError(null)} />}
               <div className="space-y-1">
@@ -196,10 +206,10 @@ export default function TopicPage() {
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 />
                 <div className={`flex justify-end text-xs ${!isTitleValid && formData.title.length > 0 ? "text-red-500 font-bold" : "text-muted-foreground"}`}>
-                    {formData.title.length < 5 && formData.title.length > 0 ? "Min 5 chars" : `${formData.title.length}/250`}
+                  {formData.title.length < 5 && formData.title.length > 0 ? "Min 5 chars" : `${formData.title.length}/250`}
                 </div>
               </div>
-              
+
               <textarea
                 className="w-full min-h-[200px] resize-none rounded-lg border border-input bg-background p-3 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none"
                 placeholder="Text (optional)"
@@ -208,7 +218,7 @@ export default function TopicPage() {
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
               />
               <div className="text-xs text-muted-foreground text-right -mt-2">
-                 {formData.content.length}/600
+                {formData.content.length}/600
               </div>
 
               <div className="flex justify-end gap-3 pt-2">

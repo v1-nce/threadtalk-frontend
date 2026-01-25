@@ -58,7 +58,6 @@ export default function Dashboard() {
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[1fr_320px] items-start">
           
-          {/* ADDED: min-w-0 prevents grid blowout */}
           <div className="flex flex-col gap-6 min-w-0">
             <h1 className="text-2xl font-bold text-crust">COMMUNITIES</h1>
             
@@ -83,7 +82,7 @@ export default function Dashboard() {
                 <h2 className="font-bold text-crust">Home</h2>
               </div>
               <p className="mb-6 text-sm text-muted-foreground leading-relaxed">
-                Welcome to ThreadTalk! Check in with your favorite communities and have fun yapping! :)
+                Welcome to ThreadTalk! Check in with your favorite communities and have fun yapping!
               </p>
               <hr className="border-border mb-6" />
               <button 
