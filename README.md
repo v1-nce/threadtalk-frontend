@@ -297,3 +297,9 @@ The backend must implement the following to work with this frontend:
 6. Commit your changes (`git commit -m 'Add amazing feature'`)
 7. Push to the branch (`git push origin feature/amazing-feature`)
 8. Open a Pull Request
+
+---
+
+## AI Declaration
+
+Gemini 3.0 Pro was only used for research, information gathering and to tutor myself to learn new technologies.
