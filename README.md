@@ -1,29 +1,42 @@
 # ThreadTalk Frontend
 
-**threadtalk-frontend** is a production-ready frontend for a lightweight threaded discussion/forum application. Built with Next.js and TypeScript, it provides a modern, responsive UI for community-driven discussions with authentication, topic management, post creation, and nested comment threads.
+Threadtalk-frontend is a production-ready frontend for a lightweight threaded discussion/forum application. Built with Next.js and TypeScript, it provides a modern, responsive UI for community-driven discussions with authentication, topic management, post creation, and nested comment threads.
 
-**Backend Repository Here:** [https://github.com/v1-nce/threadtalk-backend](https://github.com/v1-nce/threadtalk-backend)
-**Deployed Application Here:** [https://threadtalk-app.vercel.app](https://threadtalk-app.vercel.app)
+**Live Deployment:** [https://threadtalk-app.vercel.app](https://threadtalk-app.vercel.app)  
+**Backend Repository:** [https://github.com/v1-nce/threadtalk-backend](https://github.com/v1-nce/threadtalk-backend)
+
+---
 
 ## Features
 
-- **Authentication**: Secure cookie-based authentication with signup, login, and logout
-- **Topic Management**: Browse and create discussion topics/communities
-- **Post System**: Create and view posts within topics with search functionality
-- **Share System**: Non-users can view posts and comments without signing up for an account
-- **Threaded Comments**: Nested comment threads with reply functionality
-- **Real-time Updates**: Automatic refresh after creating posts and comments
-- **Responsive Design**: Mobile-first design with Tailwind CSS
-- **Production Ready**: Error handling, input validation, retry logic, and rate limit handling
+- 🔐 **Authentication** — Secure cookie-based authentication with signup, login, and logout
+- 🗂️ **Topic Management** — Browse and create discussion topics/communities
+- 📝 **Post System** — Create and view posts within topics with search functionality
+- � **Share System** — Non-users can view posts and comments without signing up
+- �💬 **Threaded Comments** — Nested comment threads with unlimited depth and reply functionality
+- � **Real-time Updates** — Automatic refresh after creating posts and comments
+- 📱 **Responsive Design** — Mobile-first design with Tailwind CSS
+- 🛡️ **Production Ready** — Comprehensive error handling, input validation, retry logic, and rate limit handling
+
+---
 
 ## Tech Stack
 
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **UI**: Tailwind CSS
-- **HTTP Client**: Axios with cookie support
-- **State Management**: React Context API (AuthProvider)
-- **Validation**: Client-side validation matching backend rules
+| Category | Technology | Version |
+|----------|------------|---------|
+| **Framework** | Next.js (App Router) | 16.0.8 |
+| **Language** | TypeScript | 5.x |
+| **Styling** | Tailwind CSS | 4.1.17 |
+| **HTTP Client** | Axios | 1.13.2 |
+| **State Management** | React Context API | - |
+| **UI Components** | Custom (forum/, ui/) | - |
+
+### Prerequisites
+
+- Node.js 18+ (recommended for Next.js 16)
+- npm or yarn
+
+---
 
 ## Project Structure
 
@@ -31,121 +44,132 @@
 src/
 ├── app/                    # Next.js App Router pages
 │   ├── page.tsx           # Home page (auth/dashboard)
+│   ├── layout.tsx         # Root layout with AuthProvider
+│   ├── globals.css        # Tailwind configuration & design tokens
 │   ├── post/[post_id]/    # Post detail page
 │   └── topic/[topic_id]/  # Topic page with posts
 ├── components/
 │   ├── forum/             # Forum-specific components
-│   │   ├── CommentItem.tsx
-│   │   ├── CommentSection.tsx
-│   │   ├── PostCard.tsx
-│   │   ├── PostList.tsx
-│   │   ├── TopicCard.tsx
-│   │   └── TopicList.tsx
+│   │   ├── CommentItem.tsx      # Individual comment with replies
+│   │   ├── CommentSection.tsx   # Comment list & input
+│   │   ├── PostCard.tsx         # Post preview card
+│   │   ├── PostList.tsx         # Post list with loading states
+│   │   ├── TopicCard.tsx        # Topic preview card
+│   │   └── TopicList.tsx        # Topic list with loading states
 │   ├── ui/                # Reusable UI components
-│   │   └── ErrorToast.tsx
-│   ├── AuthPage.tsx       # Authentication page
-│   ├── Dashboard.tsx      # Main dashboard
-│   ├── LoginForm.tsx
-│   ├── RegisterForm.tsx
-│   └── Navbar.tsx
+│   │   ├── ConfirmDialog.tsx    # Confirmation modal
+│   │   └── ErrorToast.tsx       # Error notification
+│   ├── AuthPage.tsx       # Authentication page with tab switching
+│   ├── Dashboard.tsx      # Main dashboard with topics
+│   ├── LoginForm.tsx      # Login form with validation
+│   ├── RegisterForm.tsx   # Registration form with validation
+│   └── Navbar.tsx         # Navigation bar
 ├── hooks/
-│   └── AuthProvider.tsx   # Authentication context
+│   └── AuthProvider.tsx   # Authentication context provider
 └── lib/
     ├── api.ts             # API client with retry/rate limit logic
     └── validation.ts      # Input validation utilities
 ```
 
+---
+
 ## Getting Started
 
-### Prerequisites
+### 1. Installation
 
-- Node.js 18+ (recommended for Next.js 16)
-- npm or yarn
-
-### Installation
-
-1. Install dependencies:
+Clone the repository and install dependencies:
 
 ```bash
+git clone https://github.com/v1-nce/threadtalk-frontend.git
+cd threadtalk-frontend
 npm install
 ```
 
-2. Create a `.env.local` file at the project root:
+### 2. Environment Configuration
+
+Create a `.env.local` file in the project root:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:4000
+NEXT_PUBLIC_API_URL=http://localhost:8080
 ```
 
-Replace `http://localhost:4000` with your backend API URL.
+> **Note:** Replace with your backend API URL. The default backend runs on port 8080.
 
-3. Run the development server:
+### 3. Development
+
+Run the development server:
 
 ```bash
 npm run dev
 ```
 
-The app will be available at `http://localhost:3000`.
+The app will be available at [http://localhost:3000](http://localhost:3000)
 
-### Build for Production
+### 4. Production Build
+
+Build and start the production server:
 
 ```bash
 npm run build
-npm run start
+npm start
 ```
 
-### Linting
+### 5. Linting
+
+Check code quality:
 
 ```bash
 npm run lint
 ```
 
+---
+
 ## API Integration
 
-The frontend communicates with a REST API backend. The API client (`src/lib/api.ts`) includes:
+The frontend communicates with a REST API backend via `src/lib/api.ts`. The API client includes robust error handling and retry mechanisms.
 
-- **Retry Logic**: Automatic retry with exponential backoff for retryable errors (408, 500, 503)
-- **Rate Limiting**: Handles 429 responses with proper backoff
-- **Error Handling**: Comprehensive error handling with user-friendly messages
-- **Cookie Authentication**: Uses HTTP-only cookies for secure authentication
-- **Flexible Response Types**: Handles both wrapped and direct API responses
+### Features
 
-### API Endpoints Used
+- **Retry Logic** — Automatic retry with exponential backoff for retryable errors (408, 500, 503)
+- **Rate Limiting** — Handles 429 responses with proper backoff using `Retry-After` header
+- **Error Handling** — Comprehensive error handling with user-friendly messages
+- **Cookie Authentication** — Uses HTTP-only cookies for secure authentication with `withCredentials: true`
+- **Flexible Response Types** — Handles both wrapped (`{ message, user }`) and direct API responses
 
-- `POST /auth/signup` - User registration
-- `POST /auth/login` - User authentication
-- `POST /auth/logout` - User logout
-- `GET /api/profile` - Get authenticated user profile
-- `GET /topics` - List all topics
-- `POST /api/topics` - Create a new topic
-- `GET /topics/:topic_id/posts` - Get posts in a topic (with pagination and search)
-- `POST /api/posts` - Create a new post
-- `GET /posts/:post_id` - Get post details with comments
-- `POST /api/comments` - Create a comment (or reply)
+### API Endpoints
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/auth/signup` | User registration | No |
+| `POST` | `/auth/login` | User authentication | No |
+| `POST` | `/auth/logout` | User logout | Yes |
+| `GET` | `/api/profile` | Get authenticated user profile | Yes |
+| `GET` | `/topics` | List all topics | No |
+| `POST` | `/api/topics` | Create a new topic | Yes |
+| `GET` | `/topics/:topic_id/posts` | Get posts in a topic (paginated, searchable) | No |
+| `POST` | `/api/posts` | Create a new post | Yes |
+| `DELETE` | `/api/posts/:id` | Delete a post | Yes |
+| `GET` | `/posts/:post_id` | Get post details with comments | No |
+| `POST` | `/api/comments` | Create a comment or reply | Yes |
+| `DELETE` | `/api/comments/:id` | Delete a comment | Yes |
+
+---
 
 ## Input Validation
 
-Client-side validation is implemented to match backend rules:
+Client-side validation is implemented in `src/lib/validation.ts` to match backend rules:
 
-- **Username**: 3-50 characters, alphanumeric + underscore
-- **Password**: Minimum 8 characters
-- **Post Title**: 5-250 characters
-- **Post Content**: Maximum 600 characters
-- **Comment Content**: Maximum 2000 characters
-- **Topic Name**: 1-50 characters
-- **Topic Description**: Maximum 600 characters
+| Field | Rules |
+|-------|-------|
+| **Username** | 3-50 characters, alphanumeric + underscore only |
+| **Password** | Minimum 8 characters |
+| **Post Title** | 5-250 characters |
+| **Post Content** | Maximum 600 characters (optional) |
+| **Comment Content** | Maximum 2000 characters |
+| **Topic Name** | 1-50 characters |
+| **Topic Description** | Maximum 600 characters (optional) |
 
-## Error Handling
-
-- All API errors are caught and displayed with user-friendly messages
-- Error toast notifications auto-dismiss after 5 seconds
-- Form validation errors are shown inline
-- Network errors are handled gracefully with retry logic
-
-## Performance Optimizations
-
-- **Debounced Search**: 300ms debounce on search input to reduce API calls
-- **Parallel API Calls**: Independent API calls are parallelized where possible
-- **Optimized Re-renders**: Proper use of React hooks and callbacks
+---
 
 ## Authentication Flow
 
@@ -154,44 +178,122 @@ Client-side validation is implemented to match backend rules:
 3. Frontend automatically includes cookies in subsequent requests via `withCredentials: true`
 4. `AuthProvider` checks authentication status on app load via `getProfile()`
 5. Protected routes and features are conditionally rendered based on auth state
+6. User can logout, which clears the cookie and resets auth state
 
-## Development
+---
 
-### Key Components
+## Key Components
 
-- **AuthProvider**: Manages authentication state and provides auth methods to the app
-- **Dashboard**: Main page showing all topics with search and create functionality
-- **TopicPage**: Displays posts within a topic with search and post creation
-- **PostPage**: Shows post details with nested comment threads
-- **CommentSection**: Handles comment creation and displays comment tree
+### AuthProvider (`src/hooks/AuthProvider.tsx`)
 
-### Code Style
+- Manages global authentication state
+- Provides `user`, `loading`, `signup()`, `login()`, `logout()` to the entire app
+- Automatically fetches user profile on mount
 
-- TypeScript for type safety
-- Functional components with React hooks
-- Tailwind CSS for styling
-- ESLint for code quality
+### Dashboard (`src/components/Dashboard.tsx`)
+
+- Main page showing all topics with search and create functionality
+- Includes modal for creating new topics with validation
+- Mobile-responsive with sticky sidebar
+
+### TopicPage (`src/app/topic/[topic_id]/page.tsx`)
+
+- Displays posts within a specific topic
+- Includes search with 300ms debounce to reduce API calls
+- Modal for creating new posts with character counters
+- Mobile-responsive layout
+
+### PostPage (`src/app/post/[post_id]/page.tsx`)
+
+- Shows post details with metadata (author, date, comment count)
+- Displays nested comment tree with unlimited depth
+- Share functionality (native share API or clipboard fallback)
+- Delete functionality for post owners
+
+### CommentSection (`src/components/forum/CommentSection.tsx`)
+
+- Handles comment creation with auto-expanding textarea
+- Displays comment tree recursively via `CommentItem`
+- Keyboard shortcuts (Enter to submit, Shift+Enter for newline)
+
+### CommentItem (`src/components/forum/CommentItem.tsx`)
+
+- Renders individual comments with reply functionality
+- Supports nested replies with visual indentation
+- Shows deleted state for removed comments
+- Delete functionality for comment owners
+
+---
+
+## Error Handling
+
+- All API errors are caught and displayed with user-friendly messages via `ErrorToast`
+- Error toast notifications auto-dismiss after 5 seconds
+- Form validation errors are shown inline with red text
+- Network errors are handled gracefully with automatic retry logic
+- Deleted posts/comments show `[deleted]` state instead of removing from UI
+
+---
+
+## Performance Optimizations
+
+- **Debounced Search** — 300ms debounce on search input to reduce API calls
+- **Parallel API Calls** — Independent API calls (topics + posts) are parallelized where possible
+- **Optimized Re-renders** — Proper use of `useCallback` and `useMemo` to prevent unnecessary renders
+- **Auto-expanding Textareas** — Dynamic height adjustment reduces need for scrolling
+
+---
 
 ## Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `NEXT_PUBLIC_API_URL` | Backend API base URL | Yes |
+| Variable | Description | Required | Default |
+|----------|-------------|----------|---------|
+| `NEXT_PUBLIC_API_URL` | Backend API base URL | ✅ Yes | - |
+
+---
 
 ## Backend Requirements
 
-- Expose all endpoints listed in the API Integration section
-- Support CORS with credentials (cookies)
-- Return errors in format: `{ error: "message" }`
-- Set HTTP-only cookies for authentication
-- Support pagination via `cursor` parameter for posts
-- Support search via `search` query parameter
+The backend must implement the following to work with this frontend:
+
+- **Expose all endpoints** listed in the API Integration section
+- **Support CORS** with credentials (cookies) enabled
+- **Return errors** in format: `{ error: "message" }`
+- **Set HTTP-only cookies** for `auth_token` upon successful authentication
+- **Support pagination** via `cursor` query parameter for posts
+- **Support search** via `search` query parameter for posts
+- **Delete behavior** — Mark posts/comments as deleted rather than removing from database
+
+---
+
+## Code Style
+
+- **TypeScript** for type safety across the entire codebase
+- **Functional components** with React hooks (no class components)
+- **Tailwind CSS** for styling with design system tokens in `globals.css`
+- **ESLint** for code quality enforcement
+- **Consistent naming** — PascalCase for components, camelCase for functions
+
+---
+
+## Development Workflow
+
+1. Make changes to source files
+2. Development server auto-reloads on file changes
+3. Check browser console for errors
+4. Run `npm run lint` before committing
+5. Test authentication flow, CRUD operations, and error states
+6. Build production bundle to verify no build errors
+
+---
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
 4. Run `npm run lint` to check for issues
-5. Test your changes locally
-6. Submit a pull request
+5. Test your changes locally with the backend
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
